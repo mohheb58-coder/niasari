@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سیستم ثبت غیبت دانش‌آموزان</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Tahoma', 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .tab-btn {
+            flex: 1;
+            padding: 15px;
+            background: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .tab-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .form-section {
+            margin-bottom: 30px;
+        }
+        
+        .form-section h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 20px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        label {
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: bold;
+        }
+        
+        input, select {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border 0.3s;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s;
+            margin-left: 10px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+        
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .students-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .students-table th,
+        .students-table td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .students-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: bold;
+        }
+        
+        .students-table tr:hover {
+            background: #f3f4f6;
+        }
+        
+        .checkbox-cell {
+            text-align: center;
+        }
+        
+        .checkbox-cell input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+        
+        .filter-section {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .report-box {
+            background: #f3f4f6;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            direction: rtl;
+            min-height: 100px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .info-box {
+            background: #fef3c7;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .info-box ul {
+            margin-right: 20px;
+            margin-top: 10px;
+        }
+
+        .success-message {
+            background: #d1fae5;
+            color: #065f46;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏫 سیستم مدیریت غیبت دانش‌آموزان</h1>
+            <p>ثبت و مدیریت غیبت‌های روزانه</p>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="add">➕ افزودن دانش‌آموز</button>
+            <button class="tab-btn" data-tab="absence">✅ ثبت غیبت</button>
+            <button class="tab-btn" data-tab="report">📊 گزارش مدیر</button>
+        </div>
+        
+        <div id="add-tab" class="tab-content active">
+            <div class="form-section">
+                <h2>افزودن دانش‌آموز جدید (تک‌به‌تک)</h2>
+                <form id="student-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>نام:</label>
+                            <input type="text" id="firstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>نام خانوادگی:</label>
+                            <input type="text" id="lastName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>پایه:</label>
+                            <select id="grade" required>
+                                <option value="">انتخاب کنید</option>
+                                <option value="اول">اول</option>
+                                <option value="دوم">دوم</option>
+                                <option value="سوم">سوم</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>کلاس:</label>
+                            <select id="classNum" required>
+                                <option value="">انتخاب کنید</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>معلم کلاس:</label>
+                            <input type="text" id="teacher" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">افزودن دانش‌آموز</button>
+                </form>
+                <div id="add-message" class="success-message"></div>
+            </div>
+            
+            <div class="form-section">
+                <h2>لیست دانش‌آموزان ثبت شده (تعداد: <span id="student-count">0</span>)</h2>
+                <div id="students-list"></div>
+            </div>
+        </div>
+        
+        <div id="absence-tab" class="tab-content">
+            <div class="form-section">
+                <h2>ثبت غیبت امروز</h2>
+                <div class="filter-section">
+                    <div class="form-group">
+                        <label>فیلتر پایه:</label>
+                        <select id="filter-grade">
+                            <option value="">همه پایه‌ها</option>
+                            <option value="اول">اول</option>
+                            <option value="دوم">دوم</option>
+                            <option value="سوم">سوم</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>فیلتر کلاس:</label>
+                        <select id="filter-class">
+                            <option value="">همه کلاس‌ها</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="absence-table"></div>
+                <div class="action-buttons">
+                    <button class="btn btn-success" id="save-absences-btn">💾 ذخیره غیبت‌ها</button>
+                    <button class="btn btn-danger" id="clear-absences-btn">🗑️ پاک کردن همه</button>
+                </div>
+                <div id="absence-message" class="success-message"></div>
+            </div>
+        </div>
+        
+        <div id="report-tab" class="tab-content">
+            <div class="form-section">
+                <h2>گزارش غیبت برای اولیا</h2>
+                <button class="btn btn-primary" id="generate-report-btn">📝 تولید گزارش</button>
+                <button class="btn btn-success" id="copy-report-btn" style="margin-right: 10px;">📋 کپی گزارش</button>
+                <div id="report-content" class="report-box">برای تولید گزارش، روی دکمه "تولید گزارش" کلیک کنید</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let students = [];
+        let absences = {};
+        const today = new Date().toLocaleDateString('fa-IR');
+
+        // لیست دانش‌آموزان از فایل CSV به صورت Hardcoded اضافه شد
+        const initialStudents = [
+            { id: 1731671206159, firstName: "علی اصغر", lastName: "بیکدلی", grade: "سوم", classNum: "3", teacher: "خانم نویدی" },
+            { id: 1731671206160, firstName: "بردیا", lastName: "صباخ", grade: "سوم", classNum: "1", teacher: "خانم پیرمیشانی" },
+            { id: 1731671206161, firstName: "آیان", lastName: "نظری قلعه زنجیری", grade: "سوم", classNum: "2", teacher: "آقای بازوند" },
+            { id: 1731671206162, firstName: "کوروش", lastName: "نادری", grade: "سوم", classNum: "5", teacher: "خانم موسوی" },
+            { id: 1731671206163, firstName: "کوروش", lastName: "حیدری", grade: "سوم", classNum: "4", teacher: "خانم فیضی" },
+            { id: 1731671206164, firstName: "علی", lastName: "محمدی", grade: "سوم", classNum: "6", teacher: "خانم صفری" },
+            { id: 1731671206165, firstName: "بنیامین", lastName: "ابوطالبی", grade: "سوم", classNum: "3", teacher: "خانم نویدی" },
+            { id: 1731671206166, firstName: "سارینا", lastName: "عباس پور", grade: "سوم", classNum: "1", teacher: "خانم پیرمیشانی" },
+            { id: 1731671206167, firstName: "آیلین", lastName: "افسری", grade: "سوم", classNum: "2", teacher: "آقای بازوند" },
+            { id: 1731671206168, firstName: "بنیتا", lastName: "اکبری", grade: "سوم", classNum: "5", teacher: "خانم موسوی" },
+            { id: 1731671206169, firstName: "فاطمه", lastName: "عسگری", grade: "سوم", classNum: "4", teacher: "خانم فیضی" },
+            { id: 1731671206170, firstName: "نیوشا", lastName: "علیزاده", grade: "سوم", classNum: "6", teacher: "خانم صفری" },
+            { id: 1731671206171, firstName: "علی", lastName: "قاسمی", grade: "سوم", classNum: "3", teacher: "خانم نویدی" },
+            { id: 1731671206172, firstName: "محمد", lastName: "حسینی", grade: "سوم", classNum: "1", teacher: "خانم پیرمیشانی" },
+            { id: 1731671206173, firstName: "رضا", lastName: "کرمی", grade: "سوم", classNum: "2", teacher: "آقای بازوند" },
+            { id: 1731671206174, firstName: "مهدی", lastName: "نجفی", grade: "سوم", classNum: "5", teacher: "خانم موسوی" },
+            { id: 1731671206175, firstName: "پویا", lastName: "احمدی", grade: "سوم", classNum: "4", teacher: "خانم فیضی" },
+            { id: 1731671206176, firstName: "امیر", lastName: "نوری", grade: "سوم", classNum: "6", teacher: "خانم صفری" },
+            { id: 1731671206177, firstName: "پارسا", lastName: "راد", grade: "سوم", classNum: "3", teacher: "خانم نویدی" },
+            { id: 1731671206178, firstName: "کیان", lastName: "مظفری", grade: "سوم", classNum: "1", teacher: "خانم پیرمیشانی" },
+            { id: 1731671206179, firstName: "آرمین", lastName: "کریمی", grade: "سوم", classNum: "2", teacher: "آقای بازوند" },
+            { id: 1731671206180, firstName: "سروش", lastName: "رضایی", grade: "سوم", classNum: "5", teacher: "خانم موسوی" },
+            { id: 1731671206181, firstName: "دانیال", lastName: "صادقی", grade: "سوم", classNum: "4", teacher: "خانم فیضی" },
+            { id: 1731671206182, firstName: "فرهام", lastName: "باقری", grade: "سوم", classNum: "6", teacher: "خانم صفری" },
+            { id: 1731671206183, firstName: "هادی", lastName: "هاشمی", grade: "سوم", classNum: "3", teacher: "خانم نویدی" },
+            { id: 1731671206184, firstName: "یاسین", lastName: "رحیمی", grade: "سوم", classNum: "1", teacher: "خانم پیرمیشانی" },
+            { id: 1731671206185, firstName: "سام", lastName: "مرادی", grade: "سوم", classNum: "2", teacher: "آقای بازوند" },
+            { id: 1731671206186, firstName: "میلاد", lastName: "موسوی", grade: "سوم", classNum: "5", teacher: "خانم موسوی" },
+            { id: 1731671206187, firstName: "شهاب", lastName: "شریفی", grade: "سوم", classNum: "4", teacher: "خانم فیضی" },
+            { id: 1731671206188, firstName: "کسری", lastName: "مختاری", grade: "سوم", classNum: "6", teacher: "خانم صفری" },
+            { id: 1731671206189, firstName: "آرمین", lastName: "عبدی", grade: "اول", classNum: "1", teacher: "آقای یوسفی" },
+            { id: 1731671206190, firstName: "سارا", lastName: "جهانگیری", grade: "اول", classNum: "2", teacher: "خانم محمدی" },
+            { id: 1731671206191, firstName: "مهدی", lastName: "نیکخواه", grade: "اول", classNum: "3", teacher: "خانم عارفی" },
+            { id: 1731671206192, firstName: "بهار", lastName: "خسروی", grade: "اول", classNum: "4", teacher: "آقای امینی" },
+            { id: 1731671206193, firstName: "محسن", lastName: "پناهی", grade: "اول", classNum: "5", teacher: "خانم مرادی" },
+            { id: 1731671206194, firstName: "لیلا", lastName: "کمالی", grade: "اول", classNum: "6", teacher: "آقای کاظمی" },
+            { id: 1731671206195, firstName: "پارمیس", lastName: "احمدی", grade: "اول", classNum: "1", teacher: "آقای یوسفی" },
+            { id: 1731671206196, firstName: "آریا", lastName: "هاشمی", grade: "اول", classNum: "2", teacher: "خانم محمدی" },
+            { id: 1731671206197, firstName: "نازنین", lastName: "شریفی", grade: "اول", classNum: "3", teacher: "خانم عارفی" },
+            { id: 1731671206198, firstName: "نیما", lastName: "صادقی", grade: "اول", classNum: "4", teacher: "آقای امینی" },
+            { id: 1731671206199, firstName: "عسل", lastName: "باقری", grade: "اول", classNum: "5", teacher: "خانم مرادی" },
+            { id: 1731671206200, firstName: "شایان", lastName: "نوروزی", grade: "اول", classNum: "6", teacher: "آقای کاظمی" },
+            { id: 1731671206201, firstName: "فاطمه", lastName: "نادری", grade: "اول", classNum: "1", teacher: "آقای یوسفی" },
+            { id: 1731671206202, firstName: "علی", lastName: "رحیمی", grade: "اول", classNum: "2", teacher: "خانم محمدی" },
+            { id: 1731671206203, firstName: "باران", lastName: "کرمی", grade: "اول", classNum: "3", teacher: "خانم عارفی" },
+            { id: 1731671206204, firstName: "رضا", lastName: "سلیمی", grade: "اول", classNum: "4", teacher: "آقای امینی" },
+            { id: 1731671206205, firstName: "زینب", lastName: "رضایی", grade: "اول", classNum: "5", teacher: "خانم مرادی" },
+            { id: 1731671206206, firstName: "سعید", lastName: "فتاحی", grade: "اول", classNum: "6", teacher: "آقای کاظمی" },
+            { id: 1731671206207, firstName: "آیلار", lastName: "مجیدی", grade: "اول", classNum: "1", teacher: "آقای یوسفی" },
+            { id: 1731671206208, firstName: "کسری", lastName: "حیدری", grade: "اول", classNum: "2", teacher: "خانم محمدی" },
+            { id: 1731671206209, firstName: "الهام", lastName: "قنبری", grade: "اول", classNum: "3", teacher: "خانم عارفی" },
+            { id: 1731671206210, firstName: "امیر", lastName: "ابراهیمی", grade: "اول", classNum: "4", teacher: "آقای امینی" },
+            { id: 1731671206211, firstName: "پریسا", lastName: "صفری", grade: "اول", classNum: "5", teacher: "خانم مرادی" },
+            { id: 1731671206212, firstName: "هومن", lastName: "نیکو", grade: "اول", classNum: "6", teacher: "آقای کاظمی" },
+            { id: 1731671206213, firstName: "رادین", lastName: "زارع", grade: "اول", classNum: "1", teacher: "آقای یوسفی" },
+            { id: 1731671206214, firstName: "یلدا", lastName: "بهرامی", grade: "اول", classNum: "2", teacher: "خانم محمدی" },
+            { id: 1731671206215, firstName: "محمدرضا", lastName: "داودی", grade: "اول", classNum: "3", teacher: "خانم عارفی" },
+            { id: 1731671206216, firstName: "سایه", lastName: "صمدی", grade: "اول", classNum: "4", teacher: "آقای امینی" },
+            { id: 1731671206217, firstName: "مهراد", lastName: "قادری", grade: "اول", classNum: "5", teacher: "خانم مرادی" },
+            { id: 1731671206218, firstName: "نسترن", lastName: "لطفی", grade: "اول", classNum: "6", teacher: "آقای کاظمی" },
+            { id: 1731671206219, firstName: "پویان", lastName: "حسین زاده", grade: "دوم", classNum: "1", teacher: "آقای محمدی" },
+            { id: 1731671206220, firstName: "آوا", lastName: "جهانی", grade: "دوم", classNum: "2", teacher: "خانم حسینی" },
+            { id: 1731671206221, firstName: "رامین", lastName: "عباس نژاد", grade: "دوم", classNum: "3", teacher: "خانم نادری" },
+            { id: 1731671206222, firstName: "دنیا", lastName: "ابراهیمی", grade: "دوم", classNum: "4", teacher: "آقای سلیمی" },
+            { id: 1731671206223, firstName: "سامان", lastName: "مظفری", grade: "دوم", classNum: "5", teacher: "خانم امیری" },
+            { id: 1731671206224, firstName: "ساغر", lastName: "راد", grade: "دوم", classNum: "6", teacher: "آقای نوروزی" },
+            { id: 1731671206225, firstName: "امید", lastName: "نوروزی", grade: "دوم", classNum: "1", teacher: "آقای محمدی" },
+            { id: 1731671206226, firstName: "یگانه", lastName: "کریمی", grade: "دوم", classNum: "2", teacher: "خانم حسینی" },
+            { id: 1731671206227, firstName: "سینا", lastName: "عزیزی", grade: "دوم", classNum: "3", teacher: "خانم نادری" },
+            { id: 1731671206228, firstName: "سحر", lastName: "باقری", grade: "دوم", classNum: "4", teacher: "آقای سلیمی" },
+            { id: 1731671206229, firstName: "مهران", lastName: "لطفی", grade: "دوم", classNum: "5", teacher: "خانم امیری" },
+            { id: 1731671206230, firstName: "نیلوفر", lastName: "محمدی", grade: "دوم", classNum: "6", teacher: "آقای نوروزی" },
+            { id: 1731671206231, firstName: "پویا", lastName: "احمدی", grade: "دوم", classNum: "1", teacher: "آقای محمدی" },
+            { id: 1731671206232, firstName: "سارا", lastName: "قاسمی", grade: "دوم", classNum: "2", teacher: "خانم حسینی" },
+            { id: 1731671206233, firstName: "آریا", lastName: "نیکخواه", grade: "دوم", classNum: "3", teacher: "خانم نادری" },
+            { id: 1731671206234, firstName: "پریسا", lastName: "حیدری", grade: "دوم", classNum: "4", teacher: "آقای سلیمی" },
+            { id: 1731671206235, firstName: "کیان", lastName: "رحیمی", grade: "دوم", classNum: "5", teacher: "خانم امیری" },
+            { id: 1731671206236, firstName: "مریم", lastName: "نوری", grade: "دوم", classNum: "6", teacher: "آقای نوروزی" },
+            { id: 1731671206237, firstName: "فرهاد", lastName: "علیزاده", grade: "دوم", classNum: "1", teacher: "آقای محمدی" },
+            { id: 1731671206238, firstName: "عسل", lastName: "موسوی", grade: "دوم", classNum: "2", teacher: "خانم حسینی" },
+            { id: 1731671206239, firstName: "پارسا", lastName: "زارع", grade: "دوم", classNum: "3", teacher: "خانم نادری" },
+            { id: 1731671206240, firstName: "رها", lastName: "صادقی", grade: "دوم", classNum: "4", teacher: "آقای سلیمی" },
+            { id: 1731671206241, firstName: "سهیل", lastName: "بهرامی", grade: "دوم", classNum: "5", teacher: "خانم امیری" },
+            { id: 1731671206242, firstName: "شیوا", lastName: "لطفی", grade: "دوم", classNum: "6", teacher: "آقای نوروزی" },
+            { id: 1731671206243, firstName: "آرمین", lastName: "عبدی", grade: "اول", classNum: "1", teacher: "آقای یوسفی" },
+            { id: 1731671206244, firstName: "سارا", lastName: "جهانگیری", grade: "اول", classNum: "2", teacher: "خانم محمدی" },
+            { id: 1731671206245, firstName: "مهدی", lastName: "نیکخواه", grade: "اول", classNum: "3", teacher: "خانم عارفی" },
+            { id: 1731671206246, firstName: "بهار", lastName: "خسروی", grade: "اول", classNum: "4", teacher: "آقای امینی" },
+            { id: 1731671206247, firstName: "محسن", lastName: "پناهی", grade: "اول", classNum: "5", teacher: "خانم مرادی" },
+            { id: 1731671206248, firstName: "لیلا", lastName: "کمالی", grade: "اول", classNum: "6", teacher: "آقای کاظمی" },
+            { id: 1731671206249, firstName: "پارمیس", lastName: "احمدی", grade: "اول", classNum: "1", teacher: "آقای یوسفی" },
+            { id: 1731671206250, firstName: "آریا", lastName: "هاشمی", grade: "اول", classNum: "2", teacher: "خانم محمدی" },
+            { id: 1731671206251, firstName: "نازنین", lastName: "شریفی", grade: "اول", classNum: "3", teacher: "خانم عارفی" },
+            { id: 1731671206252, firstName: "نیما", lastName: "صادقی", grade: "اول", classNum: "4", teacher: "آقای امینی" },
+            { id: 1731671206253, firstName: "عسل", lastName: "باقری", grade: "اول", classNum: "5", teacher: "خانم مرادی" },
+            { id: 1731671206254, firstName: "شایان", lastName: "نوروزی", grade: "اول", classNum: "6", teacher: "آقای کاظمی" },
+            { id: 1731671206255, firstName: "فاطمه", lastName: "نادری", grade: "اول", classNum: "1", teacher: "آقای یوسفی" },
+            { id: 1731671206256, firstName: "علی", lastName: "رحیمی", grade: "اول", classNum: "2", teacher: "خانم محمدی" },
+            { id: 1731671206257, firstName: "باران", lastName: "کرمی", grade: "اول", classNum: "3", teacher: "خانم عارفی" },
+            { id: 1731671206258, firstName: "رضا", lastName: "سلیمی", grade: "اول", classNum: "4", teacher: "آقای امینی" },
+            { id: 1731671206259, firstName: "زینب", lastName: "رضایی", grade: "اول", classNum: "5", teacher: "خانم مرادی" },
+            { id: 1731671206260, firstName: "سعید", lastName: "فتاحی", grade: "اول", classNum: "6", teacher: "آقای کاظمی" },
+            { id: 1731671206261, firstName: "آیلار", lastName: "مجیدی", grade: "اول", classNum: "1", teacher: "آقای یوسفی" },
+            { id: 1731671206262, firstName: "کسری", lastName: "حیدری", grade: "اول", classNum: "2", teacher: "خانم محمدی" },
+            { id: 1731671206263, firstName: "الهام", lastName: "قنبری", grade: "اول", classNum: "3", teacher: "خانم عارفی" },
+            { id: 1731671206264, firstName: "امیر", lastName: "ابراهیمی", grade: "اول", classNum: "4", teacher: "آقای امینی" },
+            { id: 1731671206265, firstName: "پریسا", lastName: "صفری", grade: "اول", classNum: "5", teacher: "خانم مرادی" },
+            { id: 1731671206266, firstName: "هومن", lastName: "نیکو", grade: "اول", classNum: "6", teacher: "آقای کاظمی" },
+            { id: 1731671206267, firstName: "رادین", lastName: "زارع", grade: "اول", classNum: "1", teacher: "آقای یوسفی" },
+            { id: 1731671206268, firstName: "یلدا", lastName: "بهرامی", grade: "اول", classNum: "2", teacher: "خانم محمدی" },
+            { id: 1731671206269, firstName: "محمدرضا", lastName: "داودی", grade: "اول", classNum: "3", teacher: "خانم عارفی" },
+            { id: 1731671206270, firstName: "سایه", lastName: "صمدی", grade: "اول", classNum: "4", teacher: "آقای امینی" },
+            { id: 1731671206271, firstName: "مهراد", lastName: "قادری", grade: "اول", classNum: "5", teacher: "خانم مرادی" },
+            { id: 1731671206272, firstName: "نسترن", lastName: "لطفی", grade: "اول", classNum: "6", teacher: "آقای کاظمی" },
+            { id: 1731671206273, firstName: "پویان", lastName: "حسین زاده", grade: "دوم", classNum: "1", teacher: "آقای محمدی" },
+            { id: 1731671206274, firstName: "آوا", lastName: "جهانی", grade: "دوم", classNum: "2", teacher: "خانم حسینی" },
+            { id: 1731671206275, firstName: "رامین", lastName: "عباس نژاد", grade: "دوم", classNum: "3", teacher: "خانم نادری" },
+            { id: 1731671206276, firstName: "دنیا", lastName: "ابراهیمی", grade: "دوم", classNum: "4", teacher: "آقای سلیمی" },
+            { id: 1731671206277, firstName: "سامان", lastName: "مظفری", grade: "دوم", classNum: "5", teacher: "خانم امیری" },
+            { id: 1731671206278, firstName: "ساغر", lastName: "راد", grade: "دوم", classNum: "6", teacher: "آقای نوروزی" },
+            { id: 1731671206279, firstName: "امید", lastName: "نوروزی", grade: "دوم", classNum: "1", teacher: "آقای محمدی" },
+            { id: 1731671206280, firstName: "یگانه", lastName: "کریمی", grade: "دوم", classNum: "2", teacher: "خانم حسینی" },
+            { id: 1731671206281, firstName: "سینا", lastName: "عزیزی", grade: "دوم", classNum: "3", teacher: "خانم نادری" },
+            { id: 1731671206282, firstName: "سحر", lastName: "باقری", grade: "دوم", classNum: "4", teacher: "آقای سلیمی" },
+            { id: 1731671206283, firstName: "مهران", lastName: "لطفی", grade: "دوم", classNum: "5", teacher: "خانم امیری" },
+            { id: 1731671206284, firstName: "نیلوفر", lastName: "محمدی", grade: "دوم", classNum: "6", teacher: "آقای نوروزی" },
+            { id: 1731671206285, firstName: "پویا", lastName: "احمدی", grade: "دوم", classNum: "1", teacher: "آقای محمدی" },
+            { id: 1731671206286, firstName: "سارا", lastName: "قاسمی", grade: "دوم", classNum: "2", teacher: "خانم حسینی" },
+            { id: 1731671206287, firstName: "آریا", lastName: "نیکخواه", grade: "دوم", classNum: "3", teacher: "خانم نادری" },
+            { id: 1731671206288, firstName: "پریسا", lastName: "حیدری", grade: "دوم", classNum: "4", teacher: "آقای سلیمی" },
+            { id: 1731671206289, firstName: "کیان", lastName: "رحیمی", grade: "دوم", classNum: "5", teacher: "خانم امیری" },
+            { id: 1731671206290, firstName: "مریم", lastName: "نوری", grade: "دوم", classNum: "6", teacher: "آقای نوروزی" },
+            { id: 1731671206291, firstName: "فرهاد", lastName: "علیزاده", grade: "دوم", classNum: "1", teacher: "آقای محمدی" },
+            { id: 1731671206292, firstName: "عسل", lastName: "موسوی", grade: "دوم", classNum: "2", teacher: "خانم حسینی" },
+            { id: 1731671206293, firstName: "پارسا", lastName: "زارع", grade: "دوم", classNum: "3", teacher: "خانم نادری" },
+            { id: 1731671206294, firstName: "رها", lastName: "صادقی", grade: "دوم", classNum: "4", teacher: "آقای سلیمی" },
+            { id: 1731671206295, firstName: "سهیل", lastName: "بهرامی", grade: "دوم", classNum: "5", teacher: "خانم امیری" },
+            { id: 1731671206296, firstName: "شیوا", lastName: "لطفی", grade: "دوم", classNum: "6", teacher: "آقای نوروزی" },
+            { id: 1731671206297, firstName: "علی اصغر", lastName: "بیکدلی", grade: "سوم", classNum: "3", teacher: "خانم نویدی" },
+            { id: 1731671206298, firstName: "بردیا", lastName: "صباخ", grade: "سوم", classNum: "1", teacher: "خانم پیرمیشانی" },
+            { id: 1731671206299, firstName: "آیان", lastName: "نظری قلعه زنجیری", grade: "سوم", classNum: "2", teacher: "آقای بازوند" },
+            { id: 1731671206300, firstName: "کوروش", lastName: "نادری", grade: "سوم", classNum: "5", teacher: "خانم موسوی" },
+            { id: 1731671206301, firstName: "کوروش", lastName: "حیدری", grade: "سوم", classNum: "4", teacher: "خانم فیضی" },
+            { id: 1731671206302, firstName: "علی", lastName: "محمدی", grade: "سوم", classNum: "6", teacher: "خانم صفری" },
+            { id: 1731671206303, firstName: "بنیامین", lastName: "ابوطالبی", grade: "سوم", classNum: "3", teacher: "خانم نویدی" },
+            { id: 1731671206304, firstName: "سارینا", lastName: "عباس پور", grade: "سوم", classNum: "1", teacher: "خانم پیرمیشانی" },
+            { id: 1731671206305, firstName: "آیلین", lastName: "افسری", grade: "سوم", classNum: "2", teacher: "آقای بازوند" },
+            { id: 1731671206306, firstName: "بنیتا", lastName: "اکبری", grade: "سوم", classNum: "5", teacher: "خانم موسوی" },
+            { id: 1731671206307, firstName: "فاطمه", lastName: "عسگری", grade: "سوم", classNum: "4", teacher: "خانم فیضی" },
+            { id: 1731671206308, firstName: "نیوشا", lastName: "علیزاده", grade: "سوم", classNum: "6", teacher: "خانم صفری" },
+            { id: 1731671206309, firstName: "علی", lastName: "قاسمی", grade: "سوم", classNum: "3", teacher: "خانم نویدی" },
+            { id: 1731671206310, firstName: "محمد", lastName: "حسینی", grade: "سوم", classNum: "1", teacher: "خانم پیرمیشانی" },
+            { id: 1731671206311, firstName: "رضا", lastName: "کرمی", grade: "سوم", classNum: "2", teacher: "آقای بازوند" },
+            { id: 1731671206312, firstName: "مهدی", lastName: "نجفی", grade: "سوم", classNum: "5", teacher: "خانم موسوی" },
+            { id: 1731671206313, firstName: "پویا", lastName: "احمدی", grade: "سوم", classNum: "4", teacher: "خانم فیضی" },
+            { id: 1731671206314, firstName: "امیر", lastName: "نوری", grade: "سوم", classNum: "6", teacher: "خانم صفری" },
+            { id: 1731671206315, firstName: "پارسا", lastName: "راد", grade: "سوم", classNum: "3", teacher: "خانم نویدی" },
+            { id: 1731671206316, firstName: "کیان", lastName: "مظفری", grade: "سوم", classNum: "1", teacher: "خانم پیرمیشانی" },
+            { id: 1731671206317, firstName: "آرمین", lastName: "کریمی", grade: "سوم", classNum: "2", teacher: "آقای بازوند" },
+            { id: 1731671206318, firstName: "سروش", lastName: "رضایی", grade: "سوم", classNum: "5", teacher: "خانم موسوی" },
+            { id: 1731671206319, firstName: "دانیال", lastName: "صادقی", grade: "سوم", classNum: "4", teacher: "خانم فیضی" },
+            { id: 1731671206320, firstName: "فرهام", lastName: "باقری", grade: "سوم", classNum: "6", teacher: "خانم صفری" },
+            { id: 1731671206321, firstName: "هادی", lastName: "هاشمی", grade: "سوم", classNum: "3", teacher: "خانم نویدی" },
+            { id: 1731671206322, firstName: "یاسین", lastName: "رحیمی", grade: "سوم", classNum: "1", teacher: "خانم پیرمیشانی" },
+            { id: 1731671206323, firstName: "سام", lastName: "مرادی", grade: "سوم", classNum: "2", teacher: "آقای بازوند" },
+            { id: 1731671206324, firstName: "میلاد", lastName: "موسوی", grade: "سوم", classNum: "5", teacher: "خانم موسوی" },
+            { id: 1731671206325, firstName: "شهاب", lastName: "شریفی", grade: "سوم", classNum: "4", teacher: "خانم فیضی" },
+            { id: 1731671206326, firstName: "کسری", lastName: "مختاری", grade: "سوم", classNum: "6", teacher: "خانم صفری" },
+            { id: 1731671206327, firstName: "آرمین", lastName: "عبدی", grade: "اول", classNum: "1", teacher: "آقای یوسفی" },
+            { id: 1731671206328, firstName: "سارا", lastName: "جهانگیری", grade: "اول", classNum: "2", teacher: "خانم محمدی" },
+            { id: 1731671206329, firstName: "مهدی", lastName: "نیکخواه", grade: "اول", classNum: "3", teacher: "خانم عارفی" },
+            { id: 1731671206330, firstName: "بهار", lastName: "خسروی", grade: "اول", classNum: "4", teacher: "آقای امینی" },
+            { id: 1731671206331, firstName: "محسن", lastName: "پناهی", grade: "اول", classNum: "5", teacher: "خانم مرادی" },
+            { id: 1731671206332, firstName: "لیلا", lastName: "کمالی", grade: "اول", classNum: "6", teacher: "آقای کاظمی" },
+            { id: 1731671206333, firstName: "پارمیس", lastName: "احمدی", grade: "اول", classNum: "1", teacher: "آقای یوسفی" },
+            { id: 1731671206334, firstName: "آریا", lastName: "هاشمی", grade: "اول", classNum: "2", teacher: "خانم محمدی" },
+            { id: 1731671206335, firstName: "نازنین", lastName: "شریفی", grade: "اول", classNum: "3", teacher: "خانم عارفی" },
+            { id: 1731671206336, firstName: "نیما", lastName: "صادقی", grade: "اول", classNum: "4", teacher: "آقای امینی" },
+            { id: 1731671206337, firstName: "عسل", lastName: "باقری", grade: "اول", classNum: "5", teacher: "خانم مرادی" },
+            { id: 1731671206338, firstName: "شایان", lastName: "نوروزی", grade: "اول", classNum: "6", teacher: "آقای کاظمی" },
+            { id: 1731671206339, firstName: "فاطمه", lastName: "نادری", grade: "اول", classNum: "1", teacher: "آقای یوسفی" },
+            { id: 1731671206340, firstName: "علی", lastName: "رحیمی", grade: "اول", classNum: "2", teacher: "خانم محمدی" },
+            { id: 1731671206341, firstName: "باران", lastName: "کرمی", grade: "اول", classNum: "3", teacher: "خانم عارفی" },
+            { id: 1731671206342, firstName: "رضا", lastName: "سلیمی", grade: "اول", classNum: "4", teacher: "آقای امینی" },
+            { id: 1731671206343, firstName: "زینب", lastName: "رضایی", grade: "اول", classNum: "5", teacher: "خانم مرادی" },
+            { id: 1731671206344, firstName: "سعید", lastName: "فتاحی", grade: "اول", classNum: "6", teacher: "آقای کاظمی" },
+            { id: 1731671206345, firstName: "آیلار", lastName: "مجیدی", grade: "اول", classNum: "1", teacher: "آقای یوسفی" },
+            { id: 1731671206346, firstName: "کسری", lastName: "حیدری", grade: "اول", classNum: "2", teacher: "خانم محمدی" },
+            { id: 1731671206347, firstName: "الهام", lastName: "قنبری", grade: "اول", classNum: "3", teacher: "خانم عارفی" },
+            { id: 1731671206348, firstName: "امیر", lastName: "ابراهیمی", grade: "اول", classNum: "4", teacher: "آقای امینی" },
+            { id: 1731671206349, firstName: "پریسا", lastName: "صفری", grade: "اول", classNum: "5", teacher: "خانم مرادی" },
+            { id: 1731671206350, firstName: "هومن", lastName: "نیکو", grade: "اول", classNum: "6", teacher: "آقای کاظمی" },
+            { id: 1731671206351, firstName: "رادین", lastName: "زارع", grade: "اول", classNum: "1", teacher: "آقای یوسفی" },
+            { id: 1731671206352, firstName: "یلدا", lastName: "بهرامی", grade: "اول", classNum: "2", teacher: "خانم محمدی" },
+            { id: 1731671206353, firstName: "محمدرضا", lastName: "داودی", grade: "اول", classNum: "3", teacher: "خانم عارفی" },
+            { id: 1731671206354, firstName: "سایه", lastName: "صمدی", grade: "اول", classNum: "4", teacher: "آقای امینی" },
+            { id: 1731671206355, firstName: "مهراد", lastName: "قادری", grade: "اول", classNum: "5", teacher: "خانم مرادی" },
+            { id: 1731671206356, firstName: "نسترن", lastName: "لطفی", grade: "اول", classNum: "6", teacher: "آقای کاظمی" },
+            { id: 1731671206357, firstName: "پویان", lastName: "حسین زاده", grade: "دوم", classNum: "1", teacher: "آقای محمدی" },
+            { id: 1731671206358, firstName: "آوا", lastName: "جهانی", grade: "دوم", classNum: "2", teacher: "خانم حسینی" },
+            { id: 1731671206359, firstName: "رامین", lastName: "عباس نژاد", grade: "دوم", classNum: "3", teacher: "خانم نادری" },
+            { id: 1731671206360, firstName: "دنیا", lastName: "ابراهیمی", grade: "دوم", classNum: "4", teacher: "آقای سلیمی" },
+            { id: 1731671206361, firstName: "سامان", lastName: "مظفری", grade: "دوم", classNum: "5", teacher: "خانم امیری" },
+            { id: 1731671206362, firstName: "ساغر", lastName: "راد", grade: "دوم", classNum: "6", teacher: "آقای نوروزی" },
+            { id: 1731671206363, firstName: "امید", lastName: "نوروزی", grade: "دوم", classNum: "1", teacher: "آقای محمدی" },
+            { id: 1731671206364, firstName: "یگانه", lastName: "کریمی", grade: "دوم", classNum: "2", teacher: "خانم حسینی" },
+            { id: 1731671206365, firstName: "سینا", lastName: "عزیزی", grade: "دوم", classNum: "3", teacher: "خانم نادری" },
+            { id: 1731671206366, firstName: "سحر", lastName: "باقری", grade: "دوم", classNum: "4", teacher: "آقای سلیمی" },
+            { id: 1731671206367, firstName: "مهران", lastName: "لطفی", grade: "دوم", classNum: "5", teacher: "خانم امیری" },
+            { id: 1731671206368, firstName: "نیلوفر", lastName: "محمدی", grade: "دوم", classNum: "6", teacher: "آقای نوروزی" },
+            { id: 1731671206369, firstName: "پویا", lastName: "احمدی", grade: "دوم", classNum: "1", teacher: "آقای محمدی" },
+            { id: 1731671206370, firstName: "سارا", lastName: "قاسمی", grade: "دوم", classNum: "2", teacher: "خانم حسینی" },
+            { id: 1731671206371, firstName: "آریا", lastName: "نیکخواه", grade: "دوم", classNum: "3", teacher: "خانم نادری" },
+            { id: 1731671206372, firstName: "پریسا", lastName: "حیدری", grade: "دوم", classNum: "4", teacher: "آقای سلیمی" },
+            { id: 1731671206373, firstName: "کیان", lastName: "رحیمی", grade: "دوم", classNum: "5", teacher: "خانم امیری" },
+            { id: 1731671206374, firstName: "مریم", lastName: "نوری", grade: "دوم", classNum: "6", teacher: "آقای نوروزی" },
+            { id: 1731671206375, firstName: "فرهاد", lastName: "علیزاده", grade: "دوم", classNum: "1", teacher: "آقای محمدی" },
+            { id: 1731671206376, firstName: "عسل", lastName: "موسوی", grade: "دوم", classNum: "2", teacher: "خانم حسینی" },
+            { id: 1731671206377, firstName: "پارسا", lastName: "زارع", grade: "دوم", classNum: "3", teacher: "خانم نادری" },
+            { id: 1731671206378, firstName: "رها", lastName: "صادقی", grade: "دوم", classNum: "4", teacher: "آقای سلیمی" },
+            { id: 1731671206379, firstName: "سهیل", lastName: "بهرامی", grade: "دوم", classNum: "5", teacher: "خانم امیری" },
+            { id: 1731671206380, firstName: "شیوا", lastName: "لطفی", grade: "دوم", classNum: "6", teacher: "آقای نوروزی" },
+            { id: 1731671206381, firstName: "علی اصغر", lastName: "بیکدلی", grade: "سوم", classNum: "3", teacher: "خانم نویدی" },
+            { id: 1731671206382, firstName: "بردیا", lastName: "صباخ", grade: "سوم", classNum: "1", teacher: "خانم پیرمیشانی" },
+            { id: 1731671206383, firstName: "آیان", lastName: "نظری قلعه زنجیری", grade: "سوم", classNum: "2", teacher: "آقای بازوند" },
+            { id: 1731671206384, firstName: "کوروش", lastName: "نادری", grade: "سوم", classNum: "5", teacher: "خانم موسوی" },
+            { id: 1731671206385, firstName: "کوروش", lastName: "حیدری", grade: "سوم", classNum: "4", teacher: "خانم فیضی" },
+            { id: 1731671206386, firstName: "علی", lastName: "محمدی", grade: "سوم", classNum: "6", teacher: "خانم صفری" },
+            { id: 1731671206387, firstName: "بنیامین", lastName: "ابوطالبی", grade: "سوم", classNum: "3", teacher: "خانم نویدی" },
+            { id: 1731671206388, firstName: "سارینا", lastName: "عباس پور", grade: "سوم", classNum: "1", teacher: "خانم پیرمیشانی" },
+            { id: 1731671206389, firstName: "آیلین", lastName: "افسری", grade: "سوم", classNum: "2", teacher: "آقای بازوند" },
+            { id: 1731671206390, firstName: "بنیتا", lastName: "اکبری", grade: "سوم", classNum: "5", teacher: "خانم موسوی" },
+            { id: 1731671206391, firstName: "فاطمه", lastName: "عسگری", grade: "سوم", classNum: "4", teacher: "خانم فیضی" },
+            { id: 1731671206392, firstName: "نیوشا", lastName: "علیزاده", grade: "سوم", classNum: "6", teacher: "خانم صفری" },
+            { id: 1731671206393, firstName: "علی", lastName: "قاسمی", grade: "سوم", classNum: "3", teacher: "خانم نویدی" },
+            { id: 1731671206394, firstName: "محمد", lastName: "حسینی", grade: "سوم", classNum: "1", teacher: "خانم پیرمیشانی" },
+            { id: 1731671206395, firstName: "رضا", lastName: "کرمی", grade: "سوم", classNum: "2", teacher: "آقای بازوند" },
+            { id: 1731671206396, firstName: "مهدی", lastName: "نجفی", grade: "سوم", classNum: "5", teacher: "خانم موسوی" },
+            { id: 1731671206397, firstName: "پویا", lastName: "احمدی", grade: "سوم", classNum: "4", teacher: "خانم فیضی" },
+            { id: 1731671206398, firstName: "امیر", lastName: "نوری", grade: "سوم", classNum: "6", teacher: "خانم صفری" },
+            { id: 1731671206399, firstName: "پارسا", lastName: "راد", grade: "سوم", classNum: "3", teacher: "خانم نویدی" },
+            { id: 1731671206400, firstName: "کیان", lastName: "مظفری", grade: "سوم", classNum: "1", teacher: "خانم پیرمیشانی" },
+            { id: 1731671206401, firstName: "آرمین", lastName: "کریمی", grade: "سوم", classNum: "2", teacher: "آقای بازوند" },
+            { id: 1731671206402, firstName: "سروش", lastName: "رضایی", grade: "سوم", classNum: "5", teacher: "خانم موسوی" },
+            { id: 1731671206403, firstName: "دانیال", lastName: "صادقی", grade: "سوم", classNum: "4", teacher: "خانم فیضی" },
+            { id: 1731671206404, firstName: "فرهام", lastName: "باقری", grade: "سوم", classNum: "6", teacher: "خانم صفری" },
+            { id: 1731671206405, firstName: "هادی", lastName: "هاشمی", grade: "سوم", classNum: "3", teacher: "خانم نویدی" },
+            { id: 1731671206406, firstName: "یاسین", lastName: "رحیمی", grade: "سوم", classNum: "1", teacher: "خانم پیرمیشانی" },
+            { id: 1731671206407, firstName: "سام", lastName: "مرادی", grade: "سوم", classNum: "2", teacher: "آقای بازوند" },
+            { id: 1731671206408, firstName: "میلاد", lastName: "موسوی", grade: "سوم", classNum: "5", teacher: "خانم موسوی" },
+            { id: 1731671206409, firstName: "شهاب", lastName: "شریفی", grade: "سوم", classNum: "4", teacher: "خانم فیضی" },
+            { id: 1731671206410, firstName: "کسری", lastName: "مختاری", grade: "سوم", classNum: "6", teacher: "خانم صفری" },
+            { id: 1731671206411, firstName: "آرمین", lastName: "عبدی", grade: "اول", classNum: "1", teacher: "آقای یوسفی" },
+            { id: 1731671206412, firstName: "سارا", lastName: "جهانگیری", grade: "اول", classNum: "2", teacher: "خانم محمدی" },
+            { id: 1731671206413, firstName: "مهدی", lastName: "نیکخواه", grade: "اول", classNum: "3", teacher: "خانم عارفی" },
+            { id: 1731671206414, firstName: "بهار", lastName: "خسروی", grade: "اول", classNum: "4", teacher: "آقای امینی" },
+            { id: 1731671206415, firstName: "محسن", lastName: "پناهی", grade: "اول", classNum: "5", teacher: "خانم مرادی" },
+            { id: 1731671206416, firstName: "لیلا", lastName: "کمالی", grade: "اول", classNum: "6", teacher: "آقای کاظمی" },
+            { id: 1731671206417, firstName: "پارمیس", lastName: "احمدی", grade: "اول", classNum: "1", teacher: "آقای یوسفی" },
+            { id: 1731671206418, firstName: "آریا", lastName: "هاشمی", grade: "اول", classNum: "2", teacher: "خانم محمدی" },
+            { id: 1731671206419, firstName: "نازنین", lastName: "شریفی", grade: "اول", classNum: "3", teacher: "خانم عارفی" },
+            { id: 1731671206420, firstName: "نیما", lastName: "صادقی", grade: "اول", classNum: "4", teacher: "آقای امینی" },
+            { id: 1731671206421, firstName: "عسل", lastName: "باقری", grade: "اول", classNum: "5", teacher: "خانم مرادی" },
+            { id: 1731671206422, firstName: "شایان", lastName: "نوروزی", grade: "اول", classNum: "6", teacher: "آقای کاظمی" },
+            { id: 1731671206423, firstName: "فاطمه", lastName: "نادری", grade: "اول", classNum: "1", teacher: "آقای یوسفی" },
+            { id: 1731671206424, firstName: "علی", lastName: "رحیمی", grade: "اول", classNum: "2", teacher: "خانم محمدی" },
+            { id: 1731671206425, firstName: "باران", lastName: "کرمی", grade: "اول", classNum: "3", teacher: "خانم عارفی" },
+            { id: 1731671206426, firstName: "رضا", lastName: "سلیمی", grade: "اول", classNum: "4", teacher: "آقای امینی" },
+            { id: 1731671206427, firstName: "زینب", lastName: "رضایی", grade: "اول", classNum: "5", teacher: "خانم مرادی" },
+            { id: 1731671206428, firstName: "سعید", lastName: "فتاحی", grade: "اول", classNum: "6", teacher: "آقای کاظمی" },
+            { id: 1731671206429, firstName: "آیلار", lastName: "مجیدی", grade: "اول", classNum: "1", teacher: "آقای یوسفی" },
+            { id: 1731671206430, firstName: "کسری", lastName: "حیدری", grade: "اول", classNum: "2", teacher: "خانم محمدی" },
+            { id: 1731671206431, firstName: "الهام", lastName: "قنبری", grade: "اول", classNum: "3", teacher: "خانم عارفی" },
+            { id: 1731671206432, firstName: "امیر", lastName: "ابراهیمی", grade: "اول", classNum: "4", teacher: "آقای امینی" },
+            { id: 1731671206433, firstName: "پریسا", lastName: "صفری", grade: "اول", classNum: "5", teacher: "خانم مرادی" },
+            { id: 1731671206434, firstName: "هومن", lastName: "نیکو", grade: "اول", classNum: "6", teacher: "آقای کاظمی" },
+            { id: 1731671206435, firstName: "رادین", lastName: "زارع", grade: "اول", classNum: "1", teacher: "آقای یوسفی" },
+            { id: 1731671206436, firstName: "یلدا", lastName: "بهرامی", grade: "اول", classNum: "2", teacher: "خانم محمدی" },
+            { id: 1731671206437, firstName: "محمدرضا", lastName: "داودی", grade: "اول", classNum: "3", teacher: "خانم عارفی" },
+            { id: 1731671206438, firstName: "سایه", lastName: "صمدی", grade: "اول", classNum: "4", teacher: "آقای امینی" },
+            { id: 1731671206439, firstName: "مهراد", lastName: "قادری", grade: "اول", classNum: "5", teacher: "خانم مرادی" },
+            { id: 1731671206440, firstName: "نسترن", lastName: "لطفی", grade: "اول", classNum: "6", teacher: "آقای کاظمی" },
+            { id: 1731671206441, firstName: "پویان", lastName: "حسین زاده", grade: "دوم", classNum: "1", teacher: "آقای محمدی" },
+            { id: 1731671206442, firstName: "آوا", lastName: "جهانی", grade: "دوم", classNum: "2", teacher: "خانم حسینی" },
+            { id: 1731671206443, firstName: "رامین", lastName: "عباس نژاد", grade: "دوم", classNum: "3", teacher: "خانم نادری" },
+            { id: 1731671206444, firstName: "دنیا", lastName: "ابراهیمی", grade: "دوم", classNum: "4", teacher: "آقای سلیمی" },
+            { id: 1731671206445, firstName: "سامان", lastName: "مظفری", grade: "دوم", classNum: "5", teacher: "خانم امیری" },
+            { id: 1731671206446, firstName: "ساغر", lastName: "راد", grade: "دوم", classNum: "6", teacher: "آقای نوروزی" },
+            { id: 1731671206447, firstName: "امید", lastName: "نوروزی", grade: "دوم", classNum: "1", teacher: "آقای محمدی" },
+            { id: 1731671206448, firstName: "یگانه", lastName: "کریمی", grade: "دوم", classNum: "2", teacher: "خانم حسینی" },
+            { id: 1731671206449, firstName: "سینا", lastName: "عزیزی", grade: "دوم", classNum: "3", teacher: "خانم نادری" },
+            { id: 1731671206450, firstName: "سحر", lastName: "باقری", grade: "دوم", classNum: "4", teacher: "آقای سلیمی" },
+            { id: 1731671206451, firstName: "مهران", lastName: "لطفی", grade: "دوم", classNum: "5", teacher: "خانم امیری" },
+            { id: 1731671206452, firstName: "نیلوفر", lastName: "محمدی", grade: "دوم", classNum: "6", teacher: "آقای نوروزی" },
+            { id: 1731671206453, firstName: "پویا", lastName: "احمدی", grade: "دوم", classNum: "1", teacher: "آقای محمدی" },
+            { id: 1731671206454, firstName: "سارا", lastName: "قاسمی", grade: "دوم", classNum: "2", teacher: "خانم حسینی" },
+            { id: 1731671206455, firstName: "آریا", lastName: "نیکخواه", grade: "دوم", classNum: "3", teacher: "خانم نادری" },
+            { id: 1731671206456, firstName: "پریسا", lastName: "حیدری", grade: "دوم", classNum: "4", teacher: "آقای سلیمی" },
+            { id: 1731671206457, firstName: "کیان", lastName: "رحیمی", grade: "دوم", classNum: "5", teacher: "خانم امیری" },
+            { id: 1731671206458, firstName: "مریم", lastName: "نوری", grade: "دوم", classNum: "6", teacher: "آقای نوروزی" },
+            { id: 1731671206459, firstName: "فرهاد", lastName: "علیزاده", grade: "دوم", classNum: "1", teacher: "آقای محمدی" },
+            { id: 1731671206460, firstName: "عسل", lastName: "موسوی", grade: "دوم", classNum: "2", teacher: "خانم حسینی" },
+            { id: 1731671206461, firstName: "پارسا", lastName: "زارع", grade: "دوم", classNum: "3", teacher: "خانم نادری" },
+            { id: 1731671206462, firstName: "رها", lastName: "صادقی", grade: "دوم", classNum: "4", teacher: "آقای سلیمی" },
+            { id: 1731671206463, firstName: "سهیل", lastName: "بهرامی", grade: "دوم", classNum: "5", teacher: "خانم امیری" },
+            { id: 1731671206464, firstName: "شیوا", lastName: "لطفی", grade: "دوم", classNum: "6", teacher: "آقای نوروزی" }
+        ];
+
+        // تابع نمایش پیام موفقیت
+        function showSuccessMessage(elementId, message) {
+            const el = document.getElementById(elementId);
+            el.textContent = message;
+            el.classList.add('show');
+            setTimeout(() => {
+                el.classList.remove('show');
+            }, 3000);
+        }
+
+        // بارگذاری داده‌ها. لیست دانش‌آموزان دیگر از localStorage نیست، اما غیبت‌ها هنوز از localStorage هستند.
+        function loadData() {
+            // بارگذاری لیست دانش‌آموزان از لیست initialStudents (لیست هاردکد شده)
+            // همچنین اگر تغییراتی در localStorage ذخیره شده باشد، آن را جایگزین می‌کند.
+            const saved = localStorage.getItem('students');
+            if (saved) {
+                try {
+                    students = JSON.parse(saved);
+                } catch(e) {
+                    students = initialStudents;
+                }
+            } else {
+                 students = initialStudents;
+            }
+
+            const savedAbsences = localStorage.getItem('absences_' + today);
+            if (savedAbsences) {
+                try {
+                    absences = JSON.parse(savedAbsences);
+                } catch(e) {
+                    absences = {};
+                }
+            }
+        }
+
+        // ذخیره داده‌ها
+        function saveData() {
+            // ذخیره لیست دانش‌آموزان (برای اضافه/حذف دستی)
+            localStorage.setItem('students', JSON.stringify(students));
+            // ذخیره لیست غیبت‌ها
+            localStorage.setItem('absences_' + today, JSON.stringify(absences));
+        }
+
+        // مرتب‌سازی دانش‌آموزان بر اساس الفبا
+       function sortStudents() {
+    students.sort((a, b) => {
+        // ابتدا بر اساس نام خانوادگی
+        const lastNameCompare = a.lastName.localeCompare(b.lastName, 'fa');
+        if (lastNameCompare !== 0) {
+            return lastNameCompare;
+        }
+        // اگر نام خانوادگی یکسان بود، بر اساس نام
+        return a.firstName.localeCompare(b.firstName, 'fa');
+    });
+}
+
+        // تغییر تب
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const tab = this.getAttribute('data-tab');
+                
+                document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                
+                document.getElementById(tab + '-tab').classList.add('active');
+                this.classList.add('active');
+                
+                if (tab === 'absence') {
+                    renderAbsenceTable();
+                } else if (tab === 'report') {
+                    generateReport();
+                } else if (tab === 'add') {
+                    renderStudentsList();
+                }
+            });
+        });
+
+        // افزودن دانش‌آموز
+        document.getElementById('student-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const student = {
+                id: Date.now(),
+                firstName: document.getElementById('firstName').value.trim(),
+                lastName: document.getElementById('lastName').value.trim(),
+                grade: document.getElementById('grade').value,
+                classNum: document.getElementById('classNum').value,
+                teacher: document.getElementById('teacher').value.trim()
+            };
+            
+            students.push(student);
+            sortStudents();
+            saveData();
+            this.reset();
+            renderStudentsList();
+            showSuccessMessage('add-message', '✅ دانش‌آموز با موفقیت اضافه شد!');
+        });
+
+        // نمایش لیست دانش‌آموزان
+        function renderStudentsList() {
+            const container = document.getElementById('students-list');
+            document.getElementById('student-count').textContent = students.length;
+            
+            if (students.length === 0) {
+                container.innerHTML = '<div class="empty-state">هنوز دانش‌آموزی ثبت نشده است</div>';
+                return;
+            }
+            
+            sortStudents();
+            
+            let html = '<table class="students-table"><tr><th>ردیف</th><th>نام</th><th>نام خانوادگی</th><th>پایه</th><th>کلاس</th><th>معلم</th><th>عملیات</th></tr>';
+            
+            students.forEach((s, index) => {
+                html += `<tr>
+                    <td>${index + 1}</td>
+                    <td>${s.firstName}</td>
+                    <td>${s.lastName}</td>
+                    <td>${s.grade}</td>
+                    <td>${s.classNum}</td>
+                    <td>${s.teacher}</td>
+                    <td><button class="btn btn-danger delete-btn" data-id="${s.id}">حذف</button></td>
+                </tr>`;
+            });
+            
+            html += '</table>';
+            container.innerHTML = html;
+
+            // اضافه کردن event listener برای دکمه‌های حذف
+            container.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    deleteStudent(id);
+                });
+            });
+        }
+
+        // حذف دانش‌آموز
+        function deleteStudent(id) {
+            if (confirm('آیا مطمئن هستید که می‌خواهید این دانش‌آموز را حذف کنید؟')) {
+                students = students.filter(s => s.id !== id);
+                saveData();
+                renderStudentsList();
+                showSuccessMessage('add-message', '✅ دانش‌آموز با موفقیت حذف شد');
+            }
+        }
+
+        // فیلتر دانش‌آموزان
+        document.getElementById('filter-grade').addEventListener('change', renderAbsenceTable);
+        document.getElementById('filter-class').addEventListener('change', renderAbsenceTable);
+
+        // نمایش جدول غیبت
+        function renderAbsenceTable() {
+            const container = document.getElementById('absence-table');
+            const filterGrade = document.getElementById('filter-grade').value;
+            const filterClass = document.getElementById('filter-class').value;
+            
+            let filtered = students.filter(s => {
+                return (!filterGrade || s.grade === filterGrade) &&
+                       (!filterClass || s.classNum === filterClass);
+            });
+
+            // مرتب‌سازی
+            filtered.sort((a, b) => {
+                const lastNameA = a.lastName + ' ' + a.lastName;
+                const lastNameB = b.lastName + ' ' + b.lastName;
+                return lastNameA.localeCompare(lastNameB, 'fa'); // تصحیح مرتب‌سازی
+            });
+            
+            if (filtered.length === 0) {
+                container.innerHTML = '<div class="empty-state">دانش‌آموزی یافت نشد</div>';
+                return;
+            }
+            
+            let html = '<table class="students-table"><tr><th>ردیف</th><th>نام و نام خانوادگی</th><th>پایه</th><th>کلاس</th><th>معلم</th><th>غایب</th></tr>';
+            
+            filtered.forEach((s, index) => {
+                const isAbsent = absences[s.id] || false;
+                html += `<tr>
+                    <td>${index + 1}</td>
+                    <td>${s.firstName} ${s.lastName}</td>
+                    <td>${s.grade}</td>
+                    <td>${s.classNum}</td>
+                    <td>${s.teacher}</td>
+                    <td class="checkbox-cell">
+                        <input type="checkbox" ${isAbsent ? 'checked' : ''} 
+                               class="absence-checkbox" data-student-id="${s.id}">
+                    </td>
+                </tr>`;
+            });
+            
+            html += '</table>';
+            container.innerHTML = html;
+            
+            // اضافه کردن event listener برای چک باکس‌ها
+            container.querySelectorAll('.absence-checkbox').forEach(cb => {
+                cb.addEventListener('change', function() {
+                    const studentId = parseInt(this.getAttribute('data-student-id'));
+                    absences[studentId] = this.checked;
+                });
+            });
+        }
+
+        // ذخیره غیبت‌ها
+        document.getElementById('save-absences-btn').addEventListener('click', function() {
+            saveData();
+            showSuccessMessage('absence-message', '✅ غیبت‌ها با موفقیت ثبت شد!');
+        });
+
+        // پاک کردن غیبت‌ها
+        document.getElementById('clear-absences-btn').addEventListener('click', function() {
+            if (confirm('آیا مطمئن هستید که می‌خواهید همه غیبت‌ها را پاک کنید؟')) {
+                absences = {};
+                saveData();
+                renderAbsenceTable();
+                showSuccessMessage('absence-message', '✅ همه غیبت‌ها پاک شد');
+            }
+        });
+
+        // تولید گزارش
+        function generateReport() {
+            const container = document.getElementById('report-content');
+            
+            const absentStudents = students.filter(s => absences[s.id]);
+            
+            if (absentStudents.length === 0) {
+                container.textContent = 'امروز هیچ دانش‌آموزی غیبت نداشته است. 🎉';
+                return;
+            }
+            
+            let report = `📋 گزارش غیبت دانش‌آموزان\n`;
+            report += `📅 تاریخ: ${today}\n`;
+            report += `📊 تعداد غایبین: ${absentStudents.length} نفر\n\n`;
+            report += `─────────────────────────────\n\n`;
+            
+            // گروه‌بندی بر اساس پایه و کلاس
+            const grouped = {};
+            absentStudents.forEach(s => {
+                const key = `پایه ${s.grade} - کلاس ${s.classNum}`;
+                if (!grouped[key]) grouped[key] = [];
+                grouped[key].push(s);
+            });
+            
+            // مرتب‌سازی گروه‌ها
+            const sortedKeys = Object.keys(grouped).sort();
+            
+            sortedKeys.forEach(key => {
+                report += `📚 ${key}\n`;
+                report += `👨‍🏫 معلم: ${grouped[key][0].teacher}\n\n`;
+                
+                // مرتب‌سازی دانش‌آموزان در هر گروه
+                grouped[key].sort((a, b) => {
+                    const nameA = a.firstName + ' ' + a.lastName;
+                    const nameB = b.firstName + ' ' + b.lastName;
+                    return nameA.localeCompare(nameB, 'fa');
+                });
+                
+                grouped[key].forEach((s, i) => {
+                    report += `   ${i + 1}. ${s.firstName} ${s.lastName}\n`;
+                });
+                report += `\n`;
+            });
+            
+            report += `─────────────────────────────\n`;
+            report += `\n🙏 لطفاً در اسرع وقت جهت موجه کردن غیبت اقدام نمایید.`;
+            
+            container.textContent = report;
+        }
+
+        document.getElementById('generate-report-btn').addEventListener('click', function() {
+            generateReport();
+        });
+
+        // کپی گزارش
+        document.getElementById('copy-report-btn').addEventListener('click', function() {
+            const report = document.getElementById('report-content').textContent;
+            if (report && report !== 'برای تولید گزارش، روی دکمه "تولید گزارش" کلیک کنید') {
+                navigator.clipboard.writeText(report).then(() => {
+                    alert('✅ گزارش کپی شد!');
+                }).catch(() => {
+                    alert('❌ خطا در کپی کردن. لطفاً دوباره تلاش کنید.');
+                });
+            } else {
+                alert('⚠️ ابتدا گزارش را تولید کنید');
+            }
+        });
+
+        // بارگذاری اولیه
+        loadData();
+        renderStudentsList();
+    </script>
+</body>
+</html>
+

@@ -1,954 +1,1099 @@
 <!DOCTYPE html>
-<html dir="rtl" lang="fa">
+<html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سیستم ثبت غیبت دانش‌آموزان</title>
+    <title>فرم اطلاعات خانوادگی</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         body {
-            font-family: 'Tahoma', 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
             min-height: 100vh;
             padding: 20px;
         }
-        
+
         .container {
-            max-width: 1200px;
+            max-width: 600px;
             margin: 0 auto;
         }
-        
+
+        /* Header کوچکتر */
         .header {
-            background: white;
-            padding: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.2);
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            font-size: 28px;
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 18px;
+            font-weight: 900;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 11px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 25px;
+            padding: 25px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .card-header h2 {
+            color: #333;
+            font-size: 16px;
+            font-weight: 800;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #333;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        /* Input های بزرگتر */
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 15px;
+            font-size: 15px;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-small {
+            padding: 8px 12px;
+            font-size: 12px;
+            width: auto;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            margin-top: 10px;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+
+        .btn-call {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            flex: 1;
+            padding: 10px;
+            font-size: 11px;
+        }
+
+        .btn-message {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            flex: 1;
+            padding: 10px;
+            font-size: 11px;
+        }
+
+        .message {
+            padding: 12px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 15px;
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        .message.success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 2px solid #34d399;
+        }
+
+        .message.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 2px solid #f87171;
+        }
+
+        .message.info {
+            background: #dbeafe;
+            color: #1e40af;
+            border: 2px solid #60a5fa;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* پیام شناور */
+        .floating-message {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 16px 24px;
+            border-radius: 15px;
+            font-weight: 700;
+            font-size: 14px;
+            z-index: 9999;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            animation: slideDown 0.4s ease-out;
+            min-width: 300px;
+            max-width: 90%;
             text-align: center;
         }
-        
-        h1 {
-            color: #667eea;
-            margin-bottom: 10px;
+
+        .floating-message.success {
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+            color: white;
         }
-        
+
+        .floating-message.error {
+            background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+            color: white;
+        }
+
+        .floating-message.info {
+            background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+            color: white;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -30px);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+            to {
+                opacity: 0;
+                transform: translate(-50%, -30px);
+            }
+        }
+
+        .floating-message.hiding {
+            animation: slideUp 0.3s ease-in forwards;
+        }
+
         .tabs {
             display: flex;
             gap: 10px;
-            margin-bottom: 20px;
-        }
-        
-        .tab-btn {
-            flex: 1;
-            padding: 15px;
-            background: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        
-        .tab-btn.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-        
-        .tab-content {
-            display: none;
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        .form-section {
-            margin-bottom: 30px;
-        }
-        
-        .form-section h2 {
-            color: #667eea;
             margin-bottom: 15px;
-            font-size: 20px;
-            border-bottom: 2px solid #667eea;
-            padding-bottom: 10px;
-        }
-        
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-        
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-        
-        label {
-            margin-bottom: 5px;
-            color: #333;
-            font-weight: bold;
-        }
-        
-        input, select {
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 14px;
-            transition: border 0.3s;
-        }
-        
-        input:focus, select:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-        
-        .btn {
-            padding: 12px 30px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            transition: all 0.3s;
-            margin-left: 10px;
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
-        
-        .btn-success {
-            background: #10b981;
-            color: white;
-        }
-        
-        .btn-danger {
-            background: #ef4444;
-            color: white;
-        }
-        
-        .students-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        
-        .students-table th,
-        .students-table td {
-            padding: 12px;
-            text-align: center;
-            border-bottom: 1px solid #ddd;
-        }
-        
-        .students-table th {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            font-weight: bold;
-        }
-        
-        .students-table tr:hover {
-            background: #f3f4f6;
-        }
-        
-        .checkbox-cell {
-            text-align: center;
-        }
-        
-        .checkbox-cell input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-        }
-        
-        .filter-section {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-        
-        .report-box {
-            background: #f3f4f6;
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 20px;
-            white-space: pre-wrap;
-            font-family: monospace;
-            direction: rtl;
-            min-height: 100px;
-        }
-        
-        .empty-state {
-            text-align: center;
-            padding: 40px;
-            color: #999;
         }
 
-        .action-buttons {
-            display: flex;
+        .tab {
+            flex: 1;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            color: white;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+
+        .tab:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .tab.active {
+            background: white;
+            color: #667eea;
+        }
+
+        /* Search Bar بزرگتر */
+        .search-bar {
+            display: grid;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .search-bar label {
+            display: block;
+            color: #1f2937;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .search-bar select {
+            padding: 16px !important;
+            font-size: 15px !important;
+            border: 2px solid #d1d5db !important;
+            background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%) !important;
+            color: white !important;
+            font-weight: 700 !important;
+            cursor: pointer !important;
+        }
+
+        .search-bar select option {
+            background: white;
+            color: #1f2937;
+        }
+
+        .search-bar input {
+            padding: 16px !important;
+            font-size: 15px !important;
+            border: 2px solid #d1d5db !important;
+        }
+
+        .search-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             gap: 10px;
-            margin-top: 20px;
+        }
+
+        /* پیام شناور کنار آیتم */
+        .item-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 16px 24px;
+            border-radius: 15px;
+            font-weight: 700;
+            font-size: 14px;
+            z-index: 100;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            animation: popIn 0.3s ease-out;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        .item-message.success {
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+            color: white;
+        }
+
+        .item-message.error {
+            background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+            color: white;
+        }
+
+        .item-message.info {
+            background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+            color: white;
+        }
+
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.05);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        @keyframes popOut {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+        }
+
+        .item-message.hiding {
+            animation: popOut 0.3s ease-in forwards;
+        }
+
+        .result-item {
+            background: #f9fafb;
+            padding: 18px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+            border: 2px solid #e5e7eb;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .result-item.deleting {
+            opacity: 0.6;
+            pointer-events: none;
+            background: #fef3c7;
+            border-color: #f59e0b;
+        }
+
+        .result-item:hover {
+            border-color: #667eea;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.2);
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 12px;
+        }
+
+        .result-header h3 {
+            color: #1f2937;
+            font-size: 16px;
+            font-weight: 800;
+        }
+
+        .result-header p {
+            color: #6b7280;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .delete-btn {
+            background: #fee2e2;
+            color: #dc2626;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+
+        .delete-btn:hover {
+            background: #fecaca;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            font-size: 12px;
+        }
+
+        .result-field {
+            background: white;
+            padding: 12px;
+            border-radius: 12px;
+            border: 2px solid #e5e7eb;
+        }
+
+        .result-field strong {
+            display: block;
+            color: #6b7280;
+            font-size: 10px;
+            margin-bottom: 5px;
+        }
+
+        .result-field span {
+            color: #1f2937;
+            font-weight: 700;
+        }
+
+        .phone-buttons {
+            display: flex;
+            gap: 6px;
+            margin-top: 8px;
         }
 
         .info-box {
-            background: #fef3c7;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
+            background: #dbeafe;
+            border: 2px solid #60a5fa;
+            border-radius: 15px;
+            padding: 12px;
+            text-align: center;
+            margin-top: 15px;
         }
 
-        .info-box ul {
-            margin-right: 20px;
-            margin-top: 10px;
+        .info-box p {
+            color: #1e40af;
+            font-size: 11px;
+            font-weight: 700;
         }
 
-        .success-message {
-            background: #d1fae5;
-            color: #065f46;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 10px;
-            display: none;
+        .empty-state {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
 
-        .success-message.show {
-            display: block;
+        .empty-state-icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+        }
+
+        .empty-state h3 {
+            color: #6b7280;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .empty-state p {
+            color: #9ca3af;
+            font-size: 13px;
+        }
+
+        @media (max-width: 640px) {
+            .form-row,
+            .search-buttons,
+            .result-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .phone-buttons {
+                flex-direction: row;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🏫 سیستم مدیریت غیبت دانش‌آموزان</h1>
-            <p>ثبت و مدیریت غیبت‌های روزانه</p>
+            <div class="header-icon">📋</div>
+            <h1>فرم اطلاعات خانوادگی</h1>
+            <p>اطلاعات خود را وارد کنید و در Google Sheets ذخیره کنید</p>
         </div>
-        
+
         <div class="tabs">
-            <button class="tab-btn active" data-tab="add">➕ افزودن دانش‌آموز</button>
-            <button class="tab-btn" data-tab="absence">✅ ثبت غیبت</button>
-            <button class="tab-btn" data-tab="report">📊 گزارش مدیر</button>
+            <div class="tab active" onclick="showForm()">📝 ثبت اطلاعات</div>
+            <div class="tab" onclick="showSearch()">🔍 جستجو و مدیریت</div>
         </div>
-        
-        <div id="add-tab" class="tab-content active">
-            <div class="form-section">
-                <h2>افزودن دانش‌آموز جدید (تک‌به‌تک)</h2>
-                <form id="student-form">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>نام:</label>
-                            <input type="text" id="firstName" required>
-                        </div>
-                        <div class="form-group">
-                            <label>نام خانوادگی:</label>
-                            <input type="text" id="lastName" required>
-                        </div>
-                        <div class="form-group">
-                            <label>پایه:</label>
-                            <select id="grade" required>
-                                <option value="">انتخاب کنید</option>
-                                <option value="اول">اول</option>
-                                <option value="دوم">دوم</option>
-                                <option value="سوم">سوم</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>کلاس:</label>
-                            <select id="classNum" required>
-                                <option value="">انتخاب کنید</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>معلم کلاس:</label>
-                            <input type="text" id="teacher" required>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary">افزودن دانش‌آموز</button>
-                </form>
-                <div id="add-message" class="success-message"></div>
+
+        <!-- Form Section -->
+        <div id="formSection" class="card">
+            <div class="card-header">
+                <h2>➕ ثبت اطلاعات جدید</h2>
             </div>
-            
-            <div class="form-section">
-                <h2>لیست دانش‌آموزان ثبت شده (تعداد: <span id="student-count">0</span>)</h2>
-                <div id="students-list"></div>
+
+            <div id="message"></div>
+
+            <div class="form-group">
+                <label>نام *</label>
+                <input type="text" id="name" placeholder="نام دانش‌آموز">
             </div>
-        </div>
-        
-        <div id="absence-tab" class="tab-content">
-            <div class="form-section">
-                <h2>ثبت غیبت امروز</h2>
-                <div class="filter-section">
-                    <div class="form-group">
-                        <label>فیلتر پایه:</label>
-                        <select id="filter-grade">
-                            <option value="">همه پایه‌ها</option>
-                            <option value="اول">اول</option>
-                            <option value="دوم">دوم</option>
-                            <option value="سوم">سوم</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>فیلتر کلاس:</label>
-                        <select id="filter-class">
-                            <option value="">همه کلاس‌ها</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                        </select>
-                    </div>
+
+            <div class="form-group">
+                <label>نام خانوادگی *</label>
+                <input type="text" id="lastname" placeholder="نام خانوادگی">
+            </div>
+
+            <div class="form-group">
+                <label>نام پدر</label>
+                <input type="text" id="fatherName" placeholder="نام پدر (اختیاری)">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>تلفن پدر</label>
+                    <input type="tel" id="fatherPhone" placeholder="09xxxxxxxxx">
                 </div>
-                <div id="absence-table"></div>
-                <div class="action-buttons">
-                    <button class="btn btn-success" id="save-absences-btn">💾 ذخیره غیبت‌ها</button>
-                    <button class="btn btn-danger" id="clear-absences-btn">🗑️ پاک کردن همه</button>
+                <div class="form-group">
+                    <label>تلفن مادر</label>
+                    <input type="tel" id="motherPhone" placeholder="09xxxxxxxxx">
                 </div>
-                <div id="absence-message" class="success-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label>شماره شاد</label>
+                <input type="text" id="shadNumber" placeholder="شماره شاد (اختیاری)">
+            </div>
+
+            <div class="form-group">
+                <label>شغل پدر</label>
+                <input type="text" id="fatherJob" placeholder="شغل پدر را تایپ کنید (اختیاری)" list="jobSuggestions">
+                <datalist id="jobSuggestions">
+                    <option value="کارمند">
+                    <option value="آزاد">
+                    <option value="بازنشسته">
+                    <option value="پزشک">
+                    <option value="مهندس">
+                    <option value="معلم">
+                    <option value="تاجر">
+                    <option value="راننده">
+                    <option value="کشاورز">
+                    <option value="فروشنده">
+                    <option value="کارگر">
+                    <option value="پیمانکار">
+                    <option value="نجار">
+                    <option value="آهنگر">
+                    <option value="برقکار">
+                    <option value="لوله‌کش">
+                </datalist>
+            </div>
+
+            <button class="btn" onclick="submitForm()">💾 ذخیره در Google Sheets</button>
+
+            <div class="info-box">
+                <p>💡 فقط نام و نام خانوادگی الزامی است - سایر فیلدها اختیاری</p>
             </div>
         </div>
-        
-        <div id="report-tab" class="tab-content">
-            <div class="form-section">
-                <h2>گزارش غیبت برای اولیا</h2>
-                <button class="btn btn-primary" id="generate-report-btn">📝 تولید گزارش</button>
-                <button class="btn btn-success" id="copy-report-btn" style="margin-right: 10px;">📋 کپی گزارش</button>
-                <div id="report-content" class="report-box">برای تولید گزارش، روی دکمه "تولید گزارش" کلیک کنید</div>
+
+        <!-- Search Section -->
+        <div id="searchSection" class="card hidden">
+            <div class="card-header">
+                <h2>🔍 جستجو و مدیریت</h2>
             </div>
+
+            <div id="searchMessage"></div>
+
+            <div class="search-bar">
+                <div>
+                    <label>🔍 جستجو بر اساس:</label>
+                    <select id="searchField">
+                        <option value="lastname">نام خانوادگی</option>
+                        <option value="fatherJob">شغل پدر</option>
+                        <option value="name">نام</option>
+                        <option value="fatherName">نام پدر</option>
+                    </select>
+                </div>
+                <div>
+                    <label✍️ عبارت جستجو:</label>
+                    <input type="text" id="searchInput" placeholder="شروع به تایپ کنید..." oninput="performSearch()">
+                </div>
+            </div>
+
+            <div class="search-buttons">
+                <button class="btn btn-success" onclick="loadFromSheets()">🔄 بارگذاری از Sheets</button>
+                <button class="btn btn-secondary" onclick="exportCSV()">📥 دانلود CSV</button>
+            </div>
+
+            <div id="results" style="margin-top: 20px;"></div>
         </div>
     </div>
 
     <script>
-        let students = [];
-        let absences = {};
-        const today = new Date().toLocaleDateString('fa-IR');
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwAsu5LSFrnMXaTdakZGfNsTXOD_VNyGTZ8njc4nVE67MKe0HG56Latizrzb3jwa14O/exec';
+        let allData = [];
 
-        // لیست دانش‌آموزان از فایل CSV به صورت Hardcoded اضافه شد
-        const initialStudents = [
-            { id: 1731671206159, firstName: "علی اصغر", lastName: "بیکدلی", grade: "سوم", classNum: "3", teacher: "خانم نویدی" },
-            { id: 1731671206160, firstName: "بردیا", lastName: "صباخ", grade: "سوم", classNum: "1", teacher: "خانم پیرمیشانی" },
-            { id: 1731671206161, firstName: "آیان", lastName: "نظری قلعه زنجیری", grade: "سوم", classNum: "2", teacher: "آقای بازوند" },
-            { id: 1731671206162, firstName: "کوروش", lastName: "نادری", grade: "سوم", classNum: "5", teacher: "خانم موسوی" },
-            { id: 1731671206163, firstName: "کوروش", lastName: "حیدری", grade: "سوم", classNum: "4", teacher: "خانم فیضی" },
-            { id: 1731671206164, firstName: "علی", lastName: "محمدی", grade: "سوم", classNum: "6", teacher: "خانم صفری" },
-            { id: 1731671206165, firstName: "بنیامین", lastName: "ابوطالبی", grade: "سوم", classNum: "3", teacher: "خانم نویدی" },
-            { id: 1731671206166, firstName: "سارینا", lastName: "عباس پور", grade: "سوم", classNum: "1", teacher: "خانم پیرمیشانی" },
-            { id: 1731671206167, firstName: "آیلین", lastName: "افسری", grade: "سوم", classNum: "2", teacher: "آقای بازوند" },
-            { id: 1731671206168, firstName: "بنیتا", lastName: "اکبری", grade: "سوم", classNum: "5", teacher: "خانم موسوی" },
-            { id: 1731671206169, firstName: "فاطمه", lastName: "عسگری", grade: "سوم", classNum: "4", teacher: "خانم فیضی" },
-            { id: 1731671206170, firstName: "نیوشا", lastName: "علیزاده", grade: "سوم", classNum: "6", teacher: "خانم صفری" },
-            { id: 1731671206171, firstName: "علی", lastName: "قاسمی", grade: "سوم", classNum: "3", teacher: "خانم نویدی" },
-            { id: 1731671206172, firstName: "محمد", lastName: "حسینی", grade: "سوم", classNum: "1", teacher: "خانم پیرمیشانی" },
-            { id: 1731671206173, firstName: "رضا", lastName: "کرمی", grade: "سوم", classNum: "2", teacher: "آقای بازوند" },
-            { id: 1731671206174, firstName: "مهدی", lastName: "نجفی", grade: "سوم", classNum: "5", teacher: "خانم موسوی" },
-            { id: 1731671206175, firstName: "پویا", lastName: "احمدی", grade: "سوم", classNum: "4", teacher: "خانم فیضی" },
-            { id: 1731671206176, firstName: "امیر", lastName: "نوری", grade: "سوم", classNum: "6", teacher: "خانم صفری" },
-            { id: 1731671206177, firstName: "پارسا", lastName: "راد", grade: "سوم", classNum: "3", teacher: "خانم نویدی" },
-            { id: 1731671206178, firstName: "کیان", lastName: "مظفری", grade: "سوم", classNum: "1", teacher: "خانم پیرمیشانی" },
-            { id: 1731671206179, firstName: "آرمین", lastName: "کریمی", grade: "سوم", classNum: "2", teacher: "آقای بازوند" },
-            { id: 1731671206180, firstName: "سروش", lastName: "رضایی", grade: "سوم", classNum: "5", teacher: "خانم موسوی" },
-            { id: 1731671206181, firstName: "دانیال", lastName: "صادقی", grade: "سوم", classNum: "4", teacher: "خانم فیضی" },
-            { id: 1731671206182, firstName: "فرهام", lastName: "باقری", grade: "سوم", classNum: "6", teacher: "خانم صفری" },
-            { id: 1731671206183, firstName: "هادی", lastName: "هاشمی", grade: "سوم", classNum: "3", teacher: "خانم نویدی" },
-            { id: 1731671206184, firstName: "یاسین", lastName: "رحیمی", grade: "سوم", classNum: "1", teacher: "خانم پیرمیشانی" },
-            { id: 1731671206185, firstName: "سام", lastName: "مرادی", grade: "سوم", classNum: "2", teacher: "آقای بازوند" },
-            { id: 1731671206186, firstName: "میلاد", lastName: "موسوی", grade: "سوم", classNum: "5", teacher: "خانم موسوی" },
-            { id: 1731671206187, firstName: "شهاب", lastName: "شریفی", grade: "سوم", classNum: "4", teacher: "خانم فیضی" },
-            { id: 1731671206188, firstName: "کسری", lastName: "مختاری", grade: "سوم", classNum: "6", teacher: "خانم صفری" },
-            { id: 1731671206189, firstName: "آرمین", lastName: "عبدی", grade: "اول", classNum: "1", teacher: "آقای یوسفی" },
-            { id: 1731671206190, firstName: "سارا", lastName: "جهانگیری", grade: "اول", classNum: "2", teacher: "خانم محمدی" },
-            { id: 1731671206191, firstName: "مهدی", lastName: "نیکخواه", grade: "اول", classNum: "3", teacher: "خانم عارفی" },
-            { id: 1731671206192, firstName: "بهار", lastName: "خسروی", grade: "اول", classNum: "4", teacher: "آقای امینی" },
-            { id: 1731671206193, firstName: "محسن", lastName: "پناهی", grade: "اول", classNum: "5", teacher: "خانم مرادی" },
-            { id: 1731671206194, firstName: "لیلا", lastName: "کمالی", grade: "اول", classNum: "6", teacher: "آقای کاظمی" },
-            { id: 1731671206195, firstName: "پارمیس", lastName: "احمدی", grade: "اول", classNum: "1", teacher: "آقای یوسفی" },
-            { id: 1731671206196, firstName: "آریا", lastName: "هاشمی", grade: "اول", classNum: "2", teacher: "خانم محمدی" },
-            { id: 1731671206197, firstName: "نازنین", lastName: "شریفی", grade: "اول", classNum: "3", teacher: "خانم عارفی" },
-            { id: 1731671206198, firstName: "نیما", lastName: "صادقی", grade: "اول", classNum: "4", teacher: "آقای امینی" },
-            { id: 1731671206199, firstName: "عسل", lastName: "باقری", grade: "اول", classNum: "5", teacher: "خانم مرادی" },
-            { id: 1731671206200, firstName: "شایان", lastName: "نوروزی", grade: "اول", classNum: "6", teacher: "آقای کاظمی" },
-            { id: 1731671206201, firstName: "فاطمه", lastName: "نادری", grade: "اول", classNum: "1", teacher: "آقای یوسفی" },
-            { id: 1731671206202, firstName: "علی", lastName: "رحیمی", grade: "اول", classNum: "2", teacher: "خانم محمدی" },
-            { id: 1731671206203, firstName: "باران", lastName: "کرمی", grade: "اول", classNum: "3", teacher: "خانم عارفی" },
-            { id: 1731671206204, firstName: "رضا", lastName: "سلیمی", grade: "اول", classNum: "4", teacher: "آقای امینی" },
-            { id: 1731671206205, firstName: "زینب", lastName: "رضایی", grade: "اول", classNum: "5", teacher: "خانم مرادی" },
-            { id: 1731671206206, firstName: "سعید", lastName: "فتاحی", grade: "اول", classNum: "6", teacher: "آقای کاظمی" },
-            { id: 1731671206207, firstName: "آیلار", lastName: "مجیدی", grade: "اول", classNum: "1", teacher: "آقای یوسفی" },
-            { id: 1731671206208, firstName: "کسری", lastName: "حیدری", grade: "اول", classNum: "2", teacher: "خانم محمدی" },
-            { id: 1731671206209, firstName: "الهام", lastName: "قنبری", grade: "اول", classNum: "3", teacher: "خانم عارفی" },
-            { id: 1731671206210, firstName: "امیر", lastName: "ابراهیمی", grade: "اول", classNum: "4", teacher: "آقای امینی" },
-            { id: 1731671206211, firstName: "پریسا", lastName: "صفری", grade: "اول", classNum: "5", teacher: "خانم مرادی" },
-            { id: 1731671206212, firstName: "هومن", lastName: "نیکو", grade: "اول", classNum: "6", teacher: "آقای کاظمی" },
-            { id: 1731671206213, firstName: "رادین", lastName: "زارع", grade: "اول", classNum: "1", teacher: "آقای یوسفی" },
-            { id: 1731671206214, firstName: "یلدا", lastName: "بهرامی", grade: "اول", classNum: "2", teacher: "خانم محمدی" },
-            { id: 1731671206215, firstName: "محمدرضا", lastName: "داودی", grade: "اول", classNum: "3", teacher: "خانم عارفی" },
-            { id: 1731671206216, firstName: "سایه", lastName: "صمدی", grade: "اول", classNum: "4", teacher: "آقای امینی" },
-            { id: 1731671206217, firstName: "مهراد", lastName: "قادری", grade: "اول", classNum: "5", teacher: "خانم مرادی" },
-            { id: 1731671206218, firstName: "نسترن", lastName: "لطفی", grade: "اول", classNum: "6", teacher: "آقای کاظمی" },
-            { id: 1731671206219, firstName: "پویان", lastName: "حسین زاده", grade: "دوم", classNum: "1", teacher: "آقای محمدی" },
-            { id: 1731671206220, firstName: "آوا", lastName: "جهانی", grade: "دوم", classNum: "2", teacher: "خانم حسینی" },
-            { id: 1731671206221, firstName: "رامین", lastName: "عباس نژاد", grade: "دوم", classNum: "3", teacher: "خانم نادری" },
-            { id: 1731671206222, firstName: "دنیا", lastName: "ابراهیمی", grade: "دوم", classNum: "4", teacher: "آقای سلیمی" },
-            { id: 1731671206223, firstName: "سامان", lastName: "مظفری", grade: "دوم", classNum: "5", teacher: "خانم امیری" },
-            { id: 1731671206224, firstName: "ساغر", lastName: "راد", grade: "دوم", classNum: "6", teacher: "آقای نوروزی" },
-            { id: 1731671206225, firstName: "امید", lastName: "نوروزی", grade: "دوم", classNum: "1", teacher: "آقای محمدی" },
-            { id: 1731671206226, firstName: "یگانه", lastName: "کریمی", grade: "دوم", classNum: "2", teacher: "خانم حسینی" },
-            { id: 1731671206227, firstName: "سینا", lastName: "عزیزی", grade: "دوم", classNum: "3", teacher: "خانم نادری" },
-            { id: 1731671206228, firstName: "سحر", lastName: "باقری", grade: "دوم", classNum: "4", teacher: "آقای سلیمی" },
-            { id: 1731671206229, firstName: "مهران", lastName: "لطفی", grade: "دوم", classNum: "5", teacher: "خانم امیری" },
-            { id: 1731671206230, firstName: "نیلوفر", lastName: "محمدی", grade: "دوم", classNum: "6", teacher: "آقای نوروزی" },
-            { id: 1731671206231, firstName: "پویا", lastName: "احمدی", grade: "دوم", classNum: "1", teacher: "آقای محمدی" },
-            { id: 1731671206232, firstName: "سارا", lastName: "قاسمی", grade: "دوم", classNum: "2", teacher: "خانم حسینی" },
-            { id: 1731671206233, firstName: "آریا", lastName: "نیکخواه", grade: "دوم", classNum: "3", teacher: "خانم نادری" },
-            { id: 1731671206234, firstName: "پریسا", lastName: "حیدری", grade: "دوم", classNum: "4", teacher: "آقای سلیمی" },
-            { id: 1731671206235, firstName: "کیان", lastName: "رحیمی", grade: "دوم", classNum: "5", teacher: "خانم امیری" },
-            { id: 1731671206236, firstName: "مریم", lastName: "نوری", grade: "دوم", classNum: "6", teacher: "آقای نوروزی" },
-            { id: 1731671206237, firstName: "فرهاد", lastName: "علیزاده", grade: "دوم", classNum: "1", teacher: "آقای محمدی" },
-            { id: 1731671206238, firstName: "عسل", lastName: "موسوی", grade: "دوم", classNum: "2", teacher: "خانم حسینی" },
-            { id: 1731671206239, firstName: "پارسا", lastName: "زارع", grade: "دوم", classNum: "3", teacher: "خانم نادری" },
-            { id: 1731671206240, firstName: "رها", lastName: "صادقی", grade: "دوم", classNum: "4", teacher: "آقای سلیمی" },
-            { id: 1731671206241, firstName: "سهیل", lastName: "بهرامی", grade: "دوم", classNum: "5", teacher: "خانم امیری" },
-            { id: 1731671206242, firstName: "شیوا", lastName: "لطفی", grade: "دوم", classNum: "6", teacher: "آقای نوروزی" },
-            { id: 1731671206243, firstName: "آرمین", lastName: "عبدی", grade: "اول", classNum: "1", teacher: "آقای یوسفی" },
-            { id: 1731671206244, firstName: "سارا", lastName: "جهانگیری", grade: "اول", classNum: "2", teacher: "خانم محمدی" },
-            { id: 1731671206245, firstName: "مهدی", lastName: "نیکخواه", grade: "اول", classNum: "3", teacher: "خانم عارفی" },
-            { id: 1731671206246, firstName: "بهار", lastName: "خسروی", grade: "اول", classNum: "4", teacher: "آقای امینی" },
-            { id: 1731671206247, firstName: "محسن", lastName: "پناهی", grade: "اول", classNum: "5", teacher: "خانم مرادی" },
-            { id: 1731671206248, firstName: "لیلا", lastName: "کمالی", grade: "اول", classNum: "6", teacher: "آقای کاظمی" },
-            { id: 1731671206249, firstName: "پارمیس", lastName: "احمدی", grade: "اول", classNum: "1", teacher: "آقای یوسفی" },
-            { id: 1731671206250, firstName: "آریا", lastName: "هاشمی", grade: "اول", classNum: "2", teacher: "خانم محمدی" },
-            { id: 1731671206251, firstName: "نازنین", lastName: "شریفی", grade: "اول", classNum: "3", teacher: "خانم عارفی" },
-            { id: 1731671206252, firstName: "نیما", lastName: "صادقی", grade: "اول", classNum: "4", teacher: "آقای امینی" },
-            { id: 1731671206253, firstName: "عسل", lastName: "باقری", grade: "اول", classNum: "5", teacher: "خانم مرادی" },
-            { id: 1731671206254, firstName: "شایان", lastName: "نوروزی", grade: "اول", classNum: "6", teacher: "آقای کاظمی" },
-            { id: 1731671206255, firstName: "فاطمه", lastName: "نادری", grade: "اول", classNum: "1", teacher: "آقای یوسفی" },
-            { id: 1731671206256, firstName: "علی", lastName: "رحیمی", grade: "اول", classNum: "2", teacher: "خانم محمدی" },
-            { id: 1731671206257, firstName: "باران", lastName: "کرمی", grade: "اول", classNum: "3", teacher: "خانم عارفی" },
-            { id: 1731671206258, firstName: "رضا", lastName: "سلیمی", grade: "اول", classNum: "4", teacher: "آقای امینی" },
-            { id: 1731671206259, firstName: "زینب", lastName: "رضایی", grade: "اول", classNum: "5", teacher: "خانم مرادی" },
-            { id: 1731671206260, firstName: "سعید", lastName: "فتاحی", grade: "اول", classNum: "6", teacher: "آقای کاظمی" },
-            { id: 1731671206261, firstName: "آیلار", lastName: "مجیدی", grade: "اول", classNum: "1", teacher: "آقای یوسفی" },
-            { id: 1731671206262, firstName: "کسری", lastName: "حیدری", grade: "اول", classNum: "2", teacher: "خانم محمدی" },
-            { id: 1731671206263, firstName: "الهام", lastName: "قنبری", grade: "اول", classNum: "3", teacher: "خانم عارفی" },
-            { id: 1731671206264, firstName: "امیر", lastName: "ابراهیمی", grade: "اول", classNum: "4", teacher: "آقای امینی" },
-            { id: 1731671206265, firstName: "پریسا", lastName: "صفری", grade: "اول", classNum: "5", teacher: "خانم مرادی" },
-            { id: 1731671206266, firstName: "هومن", lastName: "نیکو", grade: "اول", classNum: "6", teacher: "آقای کاظمی" },
-            { id: 1731671206267, firstName: "رادین", lastName: "زارع", grade: "اول", classNum: "1", teacher: "آقای یوسفی" },
-            { id: 1731671206268, firstName: "یلدا", lastName: "بهرامی", grade: "اول", classNum: "2", teacher: "خانم محمدی" },
-            { id: 1731671206269, firstName: "محمدرضا", lastName: "داودی", grade: "اول", classNum: "3", teacher: "خانم عارفی" },
-            { id: 1731671206270, firstName: "سایه", lastName: "صمدی", grade: "اول", classNum: "4", teacher: "آقای امینی" },
-            { id: 1731671206271, firstName: "مهراد", lastName: "قادری", grade: "اول", classNum: "5", teacher: "خانم مرادی" },
-            { id: 1731671206272, firstName: "نسترن", lastName: "لطفی", grade: "اول", classNum: "6", teacher: "آقای کاظمی" },
-            { id: 1731671206273, firstName: "پویان", lastName: "حسین زاده", grade: "دوم", classNum: "1", teacher: "آقای محمدی" },
-            { id: 1731671206274, firstName: "آوا", lastName: "جهانی", grade: "دوم", classNum: "2", teacher: "خانم حسینی" },
-            { id: 1731671206275, firstName: "رامین", lastName: "عباس نژاد", grade: "دوم", classNum: "3", teacher: "خانم نادری" },
-            { id: 1731671206276, firstName: "دنیا", lastName: "ابراهیمی", grade: "دوم", classNum: "4", teacher: "آقای سلیمی" },
-            { id: 1731671206277, firstName: "سامان", lastName: "مظفری", grade: "دوم", classNum: "5", teacher: "خانم امیری" },
-            { id: 1731671206278, firstName: "ساغر", lastName: "راد", grade: "دوم", classNum: "6", teacher: "آقای نوروزی" },
-            { id: 1731671206279, firstName: "امید", lastName: "نوروزی", grade: "دوم", classNum: "1", teacher: "آقای محمدی" },
-            { id: 1731671206280, firstName: "یگانه", lastName: "کریمی", grade: "دوم", classNum: "2", teacher: "خانم حسینی" },
-            { id: 1731671206281, firstName: "سینا", lastName: "عزیزی", grade: "دوم", classNum: "3", teacher: "خانم نادری" },
-            { id: 1731671206282, firstName: "سحر", lastName: "باقری", grade: "دوم", classNum: "4", teacher: "آقای سلیمی" },
-            { id: 1731671206283, firstName: "مهران", lastName: "لطفی", grade: "دوم", classNum: "5", teacher: "خانم امیری" },
-            { id: 1731671206284, firstName: "نیلوفر", lastName: "محمدی", grade: "دوم", classNum: "6", teacher: "آقای نوروزی" },
-            { id: 1731671206285, firstName: "پویا", lastName: "احمدی", grade: "دوم", classNum: "1", teacher: "آقای محمدی" },
-            { id: 1731671206286, firstName: "سارا", lastName: "قاسمی", grade: "دوم", classNum: "2", teacher: "خانم حسینی" },
-            { id: 1731671206287, firstName: "آریا", lastName: "نیکخواه", grade: "دوم", classNum: "3", teacher: "خانم نادری" },
-            { id: 1731671206288, firstName: "پریسا", lastName: "حیدری", grade: "دوم", classNum: "4", teacher: "آقای سلیمی" },
-            { id: 1731671206289, firstName: "کیان", lastName: "رحیمی", grade: "دوم", classNum: "5", teacher: "خانم امیری" },
-            { id: 1731671206290, firstName: "مریم", lastName: "نوری", grade: "دوم", classNum: "6", teacher: "آقای نوروزی" },
-            { id: 1731671206291, firstName: "فرهاد", lastName: "علیزاده", grade: "دوم", classNum: "1", teacher: "آقای محمدی" },
-            { id: 1731671206292, firstName: "عسل", lastName: "موسوی", grade: "دوم", classNum: "2", teacher: "خانم حسینی" },
-            { id: 1731671206293, firstName: "پارسا", lastName: "زارع", grade: "دوم", classNum: "3", teacher: "خانم نادری" },
-            { id: 1731671206294, firstName: "رها", lastName: "صادقی", grade: "دوم", classNum: "4", teacher: "آقای سلیمی" },
-            { id: 1731671206295, firstName: "سهیل", lastName: "بهرامی", grade: "دوم", classNum: "5", teacher: "خانم امیری" },
-            { id: 1731671206296, firstName: "شیوا", lastName: "لطفی", grade: "دوم", classNum: "6", teacher: "آقای نوروزی" },
-            { id: 1731671206297, firstName: "علی اصغر", lastName: "بیکدلی", grade: "سوم", classNum: "3", teacher: "خانم نویدی" },
-            { id: 1731671206298, firstName: "بردیا", lastName: "صباخ", grade: "سوم", classNum: "1", teacher: "خانم پیرمیشانی" },
-            { id: 1731671206299, firstName: "آیان", lastName: "نظری قلعه زنجیری", grade: "سوم", classNum: "2", teacher: "آقای بازوند" },
-            { id: 1731671206300, firstName: "کوروش", lastName: "نادری", grade: "سوم", classNum: "5", teacher: "خانم موسوی" },
-            { id: 1731671206301, firstName: "کوروش", lastName: "حیدری", grade: "سوم", classNum: "4", teacher: "خانم فیضی" },
-            { id: 1731671206302, firstName: "علی", lastName: "محمدی", grade: "سوم", classNum: "6", teacher: "خانم صفری" },
-            { id: 1731671206303, firstName: "بنیامین", lastName: "ابوطالبی", grade: "سوم", classNum: "3", teacher: "خانم نویدی" },
-            { id: 1731671206304, firstName: "سارینا", lastName: "عباس پور", grade: "سوم", classNum: "1", teacher: "خانم پیرمیشانی" },
-            { id: 1731671206305, firstName: "آیلین", lastName: "افسری", grade: "سوم", classNum: "2", teacher: "آقای بازوند" },
-            { id: 1731671206306, firstName: "بنیتا", lastName: "اکبری", grade: "سوم", classNum: "5", teacher: "خانم موسوی" },
-            { id: 1731671206307, firstName: "فاطمه", lastName: "عسگری", grade: "سوم", classNum: "4", teacher: "خانم فیضی" },
-            { id: 1731671206308, firstName: "نیوشا", lastName: "علیزاده", grade: "سوم", classNum: "6", teacher: "خانم صفری" },
-            { id: 1731671206309, firstName: "علی", lastName: "قاسمی", grade: "سوم", classNum: "3", teacher: "خانم نویدی" },
-            { id: 1731671206310, firstName: "محمد", lastName: "حسینی", grade: "سوم", classNum: "1", teacher: "خانم پیرمیشانی" },
-            { id: 1731671206311, firstName: "رضا", lastName: "کرمی", grade: "سوم", classNum: "2", teacher: "آقای بازوند" },
-            { id: 1731671206312, firstName: "مهدی", lastName: "نجفی", grade: "سوم", classNum: "5", teacher: "خانم موسوی" },
-            { id: 1731671206313, firstName: "پویا", lastName: "احمدی", grade: "سوم", classNum: "4", teacher: "خانم فیضی" },
-            { id: 1731671206314, firstName: "امیر", lastName: "نوری", grade: "سوم", classNum: "6", teacher: "خانم صفری" },
-            { id: 1731671206315, firstName: "پارسا", lastName: "راد", grade: "سوم", classNum: "3", teacher: "خانم نویدی" },
-            { id: 1731671206316, firstName: "کیان", lastName: "مظفری", grade: "سوم", classNum: "1", teacher: "خانم پیرمیشانی" },
-            { id: 1731671206317, firstName: "آرمین", lastName: "کریمی", grade: "سوم", classNum: "2", teacher: "آقای بازوند" },
-            { id: 1731671206318, firstName: "سروش", lastName: "رضایی", grade: "سوم", classNum: "5", teacher: "خانم موسوی" },
-            { id: 1731671206319, firstName: "دانیال", lastName: "صادقی", grade: "سوم", classNum: "4", teacher: "خانم فیضی" },
-            { id: 1731671206320, firstName: "فرهام", lastName: "باقری", grade: "سوم", classNum: "6", teacher: "خانم صفری" },
-            { id: 1731671206321, firstName: "هادی", lastName: "هاشمی", grade: "سوم", classNum: "3", teacher: "خانم نویدی" },
-            { id: 1731671206322, firstName: "یاسین", lastName: "رحیمی", grade: "سوم", classNum: "1", teacher: "خانم پیرمیشانی" },
-            { id: 1731671206323, firstName: "سام", lastName: "مرادی", grade: "سوم", classNum: "2", teacher: "آقای بازوند" },
-            { id: 1731671206324, firstName: "میلاد", lastName: "موسوی", grade: "سوم", classNum: "5", teacher: "خانم موسوی" },
-            { id: 1731671206325, firstName: "شهاب", lastName: "شریفی", grade: "سوم", classNum: "4", teacher: "خانم فیضی" },
-            { id: 1731671206326, firstName: "کسری", lastName: "مختاری", grade: "سوم", classNum: "6", teacher: "خانم صفری" },
-            { id: 1731671206327, firstName: "آرمین", lastName: "عبدی", grade: "اول", classNum: "1", teacher: "آقای یوسفی" },
-            { id: 1731671206328, firstName: "سارا", lastName: "جهانگیری", grade: "اول", classNum: "2", teacher: "خانم محمدی" },
-            { id: 1731671206329, firstName: "مهدی", lastName: "نیکخواه", grade: "اول", classNum: "3", teacher: "خانم عارفی" },
-            { id: 1731671206330, firstName: "بهار", lastName: "خسروی", grade: "اول", classNum: "4", teacher: "آقای امینی" },
-            { id: 1731671206331, firstName: "محسن", lastName: "پناهی", grade: "اول", classNum: "5", teacher: "خانم مرادی" },
-            { id: 1731671206332, firstName: "لیلا", lastName: "کمالی", grade: "اول", classNum: "6", teacher: "آقای کاظمی" },
-            { id: 1731671206333, firstName: "پارمیس", lastName: "احمدی", grade: "اول", classNum: "1", teacher: "آقای یوسفی" },
-            { id: 1731671206334, firstName: "آریا", lastName: "هاشمی", grade: "اول", classNum: "2", teacher: "خانم محمدی" },
-            { id: 1731671206335, firstName: "نازنین", lastName: "شریفی", grade: "اول", classNum: "3", teacher: "خانم عارفی" },
-            { id: 1731671206336, firstName: "نیما", lastName: "صادقی", grade: "اول", classNum: "4", teacher: "آقای امینی" },
-            { id: 1731671206337, firstName: "عسل", lastName: "باقری", grade: "اول", classNum: "5", teacher: "خانم مرادی" },
-            { id: 1731671206338, firstName: "شایان", lastName: "نوروزی", grade: "اول", classNum: "6", teacher: "آقای کاظمی" },
-            { id: 1731671206339, firstName: "فاطمه", lastName: "نادری", grade: "اول", classNum: "1", teacher: "آقای یوسفی" },
-            { id: 1731671206340, firstName: "علی", lastName: "رحیمی", grade: "اول", classNum: "2", teacher: "خانم محمدی" },
-            { id: 1731671206341, firstName: "باران", lastName: "کرمی", grade: "اول", classNum: "3", teacher: "خانم عارفی" },
-            { id: 1731671206342, firstName: "رضا", lastName: "سلیمی", grade: "اول", classNum: "4", teacher: "آقای امینی" },
-            { id: 1731671206343, firstName: "زینب", lastName: "رضایی", grade: "اول", classNum: "5", teacher: "خانم مرادی" },
-            { id: 1731671206344, firstName: "سعید", lastName: "فتاحی", grade: "اول", classNum: "6", teacher: "آقای کاظمی" },
-            { id: 1731671206345, firstName: "آیلار", lastName: "مجیدی", grade: "اول", classNum: "1", teacher: "آقای یوسفی" },
-            { id: 1731671206346, firstName: "کسری", lastName: "حیدری", grade: "اول", classNum: "2", teacher: "خانم محمدی" },
-            { id: 1731671206347, firstName: "الهام", lastName: "قنبری", grade: "اول", classNum: "3", teacher: "خانم عارفی" },
-            { id: 1731671206348, firstName: "امیر", lastName: "ابراهیمی", grade: "اول", classNum: "4", teacher: "آقای امینی" },
-            { id: 1731671206349, firstName: "پریسا", lastName: "صفری", grade: "اول", classNum: "5", teacher: "خانم مرادی" },
-            { id: 1731671206350, firstName: "هومن", lastName: "نیکو", grade: "اول", classNum: "6", teacher: "آقای کاظمی" },
-            { id: 1731671206351, firstName: "رادین", lastName: "زارع", grade: "اول", classNum: "1", teacher: "آقای یوسفی" },
-            { id: 1731671206352, firstName: "یلدا", lastName: "بهرامی", grade: "اول", classNum: "2", teacher: "خانم محمدی" },
-            { id: 1731671206353, firstName: "محمدرضا", lastName: "داودی", grade: "اول", classNum: "3", teacher: "خانم عارفی" },
-            { id: 1731671206354, firstName: "سایه", lastName: "صمدی", grade: "اول", classNum: "4", teacher: "آقای امینی" },
-            { id: 1731671206355, firstName: "مهراد", lastName: "قادری", grade: "اول", classNum: "5", teacher: "خانم مرادی" },
-            { id: 1731671206356, firstName: "نسترن", lastName: "لطفی", grade: "اول", classNum: "6", teacher: "آقای کاظمی" },
-            { id: 1731671206357, firstName: "پویان", lastName: "حسین زاده", grade: "دوم", classNum: "1", teacher: "آقای محمدی" },
-            { id: 1731671206358, firstName: "آوا", lastName: "جهانی", grade: "دوم", classNum: "2", teacher: "خانم حسینی" },
-            { id: 1731671206359, firstName: "رامین", lastName: "عباس نژاد", grade: "دوم", classNum: "3", teacher: "خانم نادری" },
-            { id: 1731671206360, firstName: "دنیا", lastName: "ابراهیمی", grade: "دوم", classNum: "4", teacher: "آقای سلیمی" },
-            { id: 1731671206361, firstName: "سامان", lastName: "مظفری", grade: "دوم", classNum: "5", teacher: "خانم امیری" },
-            { id: 1731671206362, firstName: "ساغر", lastName: "راد", grade: "دوم", classNum: "6", teacher: "آقای نوروزی" },
-            { id: 1731671206363, firstName: "امید", lastName: "نوروزی", grade: "دوم", classNum: "1", teacher: "آقای محمدی" },
-            { id: 1731671206364, firstName: "یگانه", lastName: "کریمی", grade: "دوم", classNum: "2", teacher: "خانم حسینی" },
-            { id: 1731671206365, firstName: "سینا", lastName: "عزیزی", grade: "دوم", classNum: "3", teacher: "خانم نادری" },
-            { id: 1731671206366, firstName: "سحر", lastName: "باقری", grade: "دوم", classNum: "4", teacher: "آقای سلیمی" },
-            { id: 1731671206367, firstName: "مهران", lastName: "لطفی", grade: "دوم", classNum: "5", teacher: "خانم امیری" },
-            { id: 1731671206368, firstName: "نیلوفر", lastName: "محمدی", grade: "دوم", classNum: "6", teacher: "آقای نوروزی" },
-            { id: 1731671206369, firstName: "پویا", lastName: "احمدی", grade: "دوم", classNum: "1", teacher: "آقای محمدی" },
-            { id: 1731671206370, firstName: "سارا", lastName: "قاسمی", grade: "دوم", classNum: "2", teacher: "خانم حسینی" },
-            { id: 1731671206371, firstName: "آریا", lastName: "نیکخواه", grade: "دوم", classNum: "3", teacher: "خانم نادری" },
-            { id: 1731671206372, firstName: "پریسا", lastName: "حیدری", grade: "دوم", classNum: "4", teacher: "آقای سلیمی" },
-            { id: 1731671206373, firstName: "کیان", lastName: "رحیمی", grade: "دوم", classNum: "5", teacher: "خانم امیری" },
-            { id: 1731671206374, firstName: "مریم", lastName: "نوری", grade: "دوم", classNum: "6", teacher: "آقای نوروزی" },
-            { id: 1731671206375, firstName: "فرهاد", lastName: "علیزاده", grade: "دوم", classNum: "1", teacher: "آقای محمدی" },
-            { id: 1731671206376, firstName: "عسل", lastName: "موسوی", grade: "دوم", classNum: "2", teacher: "خانم حسینی" },
-            { id: 1731671206377, firstName: "پارسا", lastName: "زارع", grade: "دوم", classNum: "3", teacher: "خانم نادری" },
-            { id: 1731671206378, firstName: "رها", lastName: "صادقی", grade: "دوم", classNum: "4", teacher: "آقای سلیمی" },
-            { id: 1731671206379, firstName: "سهیل", lastName: "بهرامی", grade: "دوم", classNum: "5", teacher: "خانم امیری" },
-            { id: 1731671206380, firstName: "شیوا", lastName: "لطفی", grade: "دوم", classNum: "6", teacher: "آقای نوروزی" },
-            { id: 1731671206381, firstName: "علی اصغر", lastName: "بیکدلی", grade: "سوم", classNum: "3", teacher: "خانم نویدی" },
-            { id: 1731671206382, firstName: "بردیا", lastName: "صباخ", grade: "سوم", classNum: "1", teacher: "خانم پیرمیشانی" },
-            { id: 1731671206383, firstName: "آیان", lastName: "نظری قلعه زنجیری", grade: "سوم", classNum: "2", teacher: "آقای بازوند" },
-            { id: 1731671206384, firstName: "کوروش", lastName: "نادری", grade: "سوم", classNum: "5", teacher: "خانم موسوی" },
-            { id: 1731671206385, firstName: "کوروش", lastName: "حیدری", grade: "سوم", classNum: "4", teacher: "خانم فیضی" },
-            { id: 1731671206386, firstName: "علی", lastName: "محمدی", grade: "سوم", classNum: "6", teacher: "خانم صفری" },
-            { id: 1731671206387, firstName: "بنیامین", lastName: "ابوطالبی", grade: "سوم", classNum: "3", teacher: "خانم نویدی" },
-            { id: 1731671206388, firstName: "سارینا", lastName: "عباس پور", grade: "سوم", classNum: "1", teacher: "خانم پیرمیشانی" },
-            { id: 1731671206389, firstName: "آیلین", lastName: "افسری", grade: "سوم", classNum: "2", teacher: "آقای بازوند" },
-            { id: 1731671206390, firstName: "بنیتا", lastName: "اکبری", grade: "سوم", classNum: "5", teacher: "خانم موسوی" },
-            { id: 1731671206391, firstName: "فاطمه", lastName: "عسگری", grade: "سوم", classNum: "4", teacher: "خانم فیضی" },
-            { id: 1731671206392, firstName: "نیوشا", lastName: "علیزاده", grade: "سوم", classNum: "6", teacher: "خانم صفری" },
-            { id: 1731671206393, firstName: "علی", lastName: "قاسمی", grade: "سوم", classNum: "3", teacher: "خانم نویدی" },
-            { id: 1731671206394, firstName: "محمد", lastName: "حسینی", grade: "سوم", classNum: "1", teacher: "خانم پیرمیشانی" },
-            { id: 1731671206395, firstName: "رضا", lastName: "کرمی", grade: "سوم", classNum: "2", teacher: "آقای بازوند" },
-            { id: 1731671206396, firstName: "مهدی", lastName: "نجفی", grade: "سوم", classNum: "5", teacher: "خانم موسوی" },
-            { id: 1731671206397, firstName: "پویا", lastName: "احمدی", grade: "سوم", classNum: "4", teacher: "خانم فیضی" },
-            { id: 1731671206398, firstName: "امیر", lastName: "نوری", grade: "سوم", classNum: "6", teacher: "خانم صفری" },
-            { id: 1731671206399, firstName: "پارسا", lastName: "راد", grade: "سوم", classNum: "3", teacher: "خانم نویدی" },
-            { id: 1731671206400, firstName: "کیان", lastName: "مظفری", grade: "سوم", classNum: "1", teacher: "خانم پیرمیشانی" },
-            { id: 1731671206401, firstName: "آرمین", lastName: "کریمی", grade: "سوم", classNum: "2", teacher: "آقای بازوند" },
-            { id: 1731671206402, firstName: "سروش", lastName: "رضایی", grade: "سوم", classNum: "5", teacher: "خانم موسوی" },
-            { id: 1731671206403, firstName: "دانیال", lastName: "صادقی", grade: "سوم", classNum: "4", teacher: "خانم فیضی" },
-            { id: 1731671206404, firstName: "فرهام", lastName: "باقری", grade: "سوم", classNum: "6", teacher: "خانم صفری" },
-            { id: 1731671206405, firstName: "هادی", lastName: "هاشمی", grade: "سوم", classNum: "3", teacher: "خانم نویدی" },
-            { id: 1731671206406, firstName: "یاسین", lastName: "رحیمی", grade: "سوم", classNum: "1", teacher: "خانم پیرمیشانی" },
-            { id: 1731671206407, firstName: "سام", lastName: "مرادی", grade: "سوم", classNum: "2", teacher: "آقای بازوند" },
-            { id: 1731671206408, firstName: "میلاد", lastName: "موسوی", grade: "سوم", classNum: "5", teacher: "خانم موسوی" },
-            { id: 1731671206409, firstName: "شهاب", lastName: "شریفی", grade: "سوم", classNum: "4", teacher: "خانم فیضی" },
-            { id: 1731671206410, firstName: "کسری", lastName: "مختاری", grade: "سوم", classNum: "6", teacher: "خانم صفری" },
-            { id: 1731671206411, firstName: "آرمین", lastName: "عبدی", grade: "اول", classNum: "1", teacher: "آقای یوسفی" },
-            { id: 1731671206412, firstName: "سارا", lastName: "جهانگیری", grade: "اول", classNum: "2", teacher: "خانم محمدی" },
-            { id: 1731671206413, firstName: "مهدی", lastName: "نیکخواه", grade: "اول", classNum: "3", teacher: "خانم عارفی" },
-            { id: 1731671206414, firstName: "بهار", lastName: "خسروی", grade: "اول", classNum: "4", teacher: "آقای امینی" },
-            { id: 1731671206415, firstName: "محسن", lastName: "پناهی", grade: "اول", classNum: "5", teacher: "خانم مرادی" },
-            { id: 1731671206416, firstName: "لیلا", lastName: "کمالی", grade: "اول", classNum: "6", teacher: "آقای کاظمی" },
-            { id: 1731671206417, firstName: "پارمیس", lastName: "احمدی", grade: "اول", classNum: "1", teacher: "آقای یوسفی" },
-            { id: 1731671206418, firstName: "آریا", lastName: "هاشمی", grade: "اول", classNum: "2", teacher: "خانم محمدی" },
-            { id: 1731671206419, firstName: "نازنین", lastName: "شریفی", grade: "اول", classNum: "3", teacher: "خانم عارفی" },
-            { id: 1731671206420, firstName: "نیما", lastName: "صادقی", grade: "اول", classNum: "4", teacher: "آقای امینی" },
-            { id: 1731671206421, firstName: "عسل", lastName: "باقری", grade: "اول", classNum: "5", teacher: "خانم مرادی" },
-            { id: 1731671206422, firstName: "شایان", lastName: "نوروزی", grade: "اول", classNum: "6", teacher: "آقای کاظمی" },
-            { id: 1731671206423, firstName: "فاطمه", lastName: "نادری", grade: "اول", classNum: "1", teacher: "آقای یوسفی" },
-            { id: 1731671206424, firstName: "علی", lastName: "رحیمی", grade: "اول", classNum: "2", teacher: "خانم محمدی" },
-            { id: 1731671206425, firstName: "باران", lastName: "کرمی", grade: "اول", classNum: "3", teacher: "خانم عارفی" },
-            { id: 1731671206426, firstName: "رضا", lastName: "سلیمی", grade: "اول", classNum: "4", teacher: "آقای امینی" },
-            { id: 1731671206427, firstName: "زینب", lastName: "رضایی", grade: "اول", classNum: "5", teacher: "خانم مرادی" },
-            { id: 1731671206428, firstName: "سعید", lastName: "فتاحی", grade: "اول", classNum: "6", teacher: "آقای کاظمی" },
-            { id: 1731671206429, firstName: "آیلار", lastName: "مجیدی", grade: "اول", classNum: "1", teacher: "آقای یوسفی" },
-            { id: 1731671206430, firstName: "کسری", lastName: "حیدری", grade: "اول", classNum: "2", teacher: "خانم محمدی" },
-            { id: 1731671206431, firstName: "الهام", lastName: "قنبری", grade: "اول", classNum: "3", teacher: "خانم عارفی" },
-            { id: 1731671206432, firstName: "امیر", lastName: "ابراهیمی", grade: "اول", classNum: "4", teacher: "آقای امینی" },
-            { id: 1731671206433, firstName: "پریسا", lastName: "صفری", grade: "اول", classNum: "5", teacher: "خانم مرادی" },
-            { id: 1731671206434, firstName: "هومن", lastName: "نیکو", grade: "اول", classNum: "6", teacher: "آقای کاظمی" },
-            { id: 1731671206435, firstName: "رادین", lastName: "زارع", grade: "اول", classNum: "1", teacher: "آقای یوسفی" },
-            { id: 1731671206436, firstName: "یلدا", lastName: "بهرامی", grade: "اول", classNum: "2", teacher: "خانم محمدی" },
-            { id: 1731671206437, firstName: "محمدرضا", lastName: "داودی", grade: "اول", classNum: "3", teacher: "خانم عارفی" },
-            { id: 1731671206438, firstName: "سایه", lastName: "صمدی", grade: "اول", classNum: "4", teacher: "آقای امینی" },
-            { id: 1731671206439, firstName: "مهراد", lastName: "قادری", grade: "اول", classNum: "5", teacher: "خانم مرادی" },
-            { id: 1731671206440, firstName: "نسترن", lastName: "لطفی", grade: "اول", classNum: "6", teacher: "آقای کاظمی" },
-            { id: 1731671206441, firstName: "پویان", lastName: "حسین زاده", grade: "دوم", classNum: "1", teacher: "آقای محمدی" },
-            { id: 1731671206442, firstName: "آوا", lastName: "جهانی", grade: "دوم", classNum: "2", teacher: "خانم حسینی" },
-            { id: 1731671206443, firstName: "رامین", lastName: "عباس نژاد", grade: "دوم", classNum: "3", teacher: "خانم نادری" },
-            { id: 1731671206444, firstName: "دنیا", lastName: "ابراهیمی", grade: "دوم", classNum: "4", teacher: "آقای سلیمی" },
-            { id: 1731671206445, firstName: "سامان", lastName: "مظفری", grade: "دوم", classNum: "5", teacher: "خانم امیری" },
-            { id: 1731671206446, firstName: "ساغر", lastName: "راد", grade: "دوم", classNum: "6", teacher: "آقای نوروزی" },
-            { id: 1731671206447, firstName: "امید", lastName: "نوروزی", grade: "دوم", classNum: "1", teacher: "آقای محمدی" },
-            { id: 1731671206448, firstName: "یگانه", lastName: "کریمی", grade: "دوم", classNum: "2", teacher: "خانم حسینی" },
-            { id: 1731671206449, firstName: "سینا", lastName: "عزیزی", grade: "دوم", classNum: "3", teacher: "خانم نادری" },
-            { id: 1731671206450, firstName: "سحر", lastName: "باقری", grade: "دوم", classNum: "4", teacher: "آقای سلیمی" },
-            { id: 1731671206451, firstName: "مهران", lastName: "لطفی", grade: "دوم", classNum: "5", teacher: "خانم امیری" },
-            { id: 1731671206452, firstName: "نیلوفر", lastName: "محمدی", grade: "دوم", classNum: "6", teacher: "آقای نوروزی" },
-            { id: 1731671206453, firstName: "پویا", lastName: "احمدی", grade: "دوم", classNum: "1", teacher: "آقای محمدی" },
-            { id: 1731671206454, firstName: "سارا", lastName: "قاسمی", grade: "دوم", classNum: "2", teacher: "خانم حسینی" },
-            { id: 1731671206455, firstName: "آریا", lastName: "نیکخواه", grade: "دوم", classNum: "3", teacher: "خانم نادری" },
-            { id: 1731671206456, firstName: "پریسا", lastName: "حیدری", grade: "دوم", classNum: "4", teacher: "آقای سلیمی" },
-            { id: 1731671206457, firstName: "کیان", lastName: "رحیمی", grade: "دوم", classNum: "5", teacher: "خانم امیری" },
-            { id: 1731671206458, firstName: "مریم", lastName: "نوری", grade: "دوم", classNum: "6", teacher: "آقای نوروزی" },
-            { id: 1731671206459, firstName: "فرهاد", lastName: "علیزاده", grade: "دوم", classNum: "1", teacher: "آقای محمدی" },
-            { id: 1731671206460, firstName: "عسل", lastName: "موسوی", grade: "دوم", classNum: "2", teacher: "خانم حسینی" },
-            { id: 1731671206461, firstName: "پارسا", lastName: "زارع", grade: "دوم", classNum: "3", teacher: "خانم نادری" },
-            { id: 1731671206462, firstName: "رها", lastName: "صادقی", grade: "دوم", classNum: "4", teacher: "آقای سلیمی" },
-            { id: 1731671206463, firstName: "سهیل", lastName: "بهرامی", grade: "دوم", classNum: "5", teacher: "خانم امیری" },
-            { id: 1731671206464, firstName: "شیوا", lastName: "لطفی", grade: "دوم", classNum: "6", teacher: "آقای نوروزی" }
-        ];
+        function showForm() {
+            document.getElementById('formSection').classList.remove('hidden');
+            document.getElementById('searchSection').classList.add('hidden');
+            document.querySelectorAll('.tab')[0].classList.add('active');
+            document.querySelectorAll('.tab')[1].classList.remove('active');
+        }
 
-        // تابع نمایش پیام موفقیت
-        function showSuccessMessage(elementId, message) {
-            const el = document.getElementById(elementId);
-            el.textContent = message;
-            el.classList.add('show');
+        function showSearch() {
+            document.getElementById('formSection').classList.add('hidden');
+            document.getElementById('searchSection').classList.remove('hidden');
+            document.querySelectorAll('.tab')[0].classList.remove('active');
+            document.querySelectorAll('.tab')[1].classList.add('active');
+            
+            // نمایش پیام اولیه
+            if (allData.length === 0) {
+                displayEmptyState('start');
+            }
+        }
+
+        function showMessage(type, text, target = 'message') {
+            // اگر target مشخص نیست، پیام شناور نشون بده
+            if (target === 'floating') {
+                showFloatingMessage(type, text);
+                return;
+            }
+            
+            // پیام معمولی در کارت
+            const msg = document.getElementById(target);
+            if (msg) {
+                msg.className = `message ${type}`;
+                msg.textContent = text;
+                msg.classList.remove('hidden');
+                
+                const timeout = type === 'info' ? 3000 : 5000;
+                setTimeout(() => msg.classList.add('hidden'), timeout);
+            }
+        }
+
+        function showFloatingMessage(type, text) {
+            // حذف پیام‌های قبلی
+            const existingMessages = document.querySelectorAll('.floating-message');
+            existingMessages.forEach(msg => msg.remove());
+            
+            // ساخت پیام جدید
+            const message = document.createElement('div');
+            message.className = `floating-message ${type}`;
+            message.textContent = text;
+            
+            document.body.appendChild(message);
+            
+            // حذف پیام بعد از 4 ثانیه
             setTimeout(() => {
-                el.classList.remove('show');
-            }, 3000);
+                message.classList.add('hiding');
+                setTimeout(() => message.remove(), 300);
+            }, 4000);
         }
 
-        // بارگذاری داده‌ها. لیست دانش‌آموزان دیگر از localStorage نیست، اما غیبت‌ها هنوز از localStorage هستند.
-        function loadData() {
-            // بارگذاری لیست دانش‌آموزان از لیست initialStudents (لیست هاردکد شده)
-            // همچنین اگر تغییراتی در localStorage ذخیره شده باشد، آن را جایگزین می‌کند.
-            const saved = localStorage.getItem('students');
-            if (saved) {
-                try {
-                    students = JSON.parse(saved);
-                } catch(e) {
-                    students = initialStudents;
-                }
-            } else {
-                 students = initialStudents;
+        async function submitForm() {
+            const name = document.getElementById('name').value.trim();
+            const lastname = document.getElementById('lastname').value.trim();
+
+            if (!name || !lastname) {
+                showFloatingMessage('error', '⚠️ نام و نام خانوادگی الزامی است');
+                return;
             }
 
-            const savedAbsences = localStorage.getItem('absences_' + today);
-            if (savedAbsences) {
-                try {
-                    absences = JSON.parse(savedAbsences);
-                } catch(e) {
-                    absences = {};
-                }
-            }
-        }
+            // نمایش پیام شناور در حال ارسال
+            showFloatingMessage('info', '⏳ در حال ارسال به Google Sheets...');
 
-        // ذخیره داده‌ها
-        function saveData() {
-            // ذخیره لیست دانش‌آموزان (برای اضافه/حذف دستی)
-            localStorage.setItem('students', JSON.stringify(students));
-            // ذخیره لیست غیبت‌ها
-            localStorage.setItem('absences_' + today, JSON.stringify(absences));
-        }
-
-        // مرتب‌سازی دانش‌آموزان بر اساس الفبا
-       function sortStudents() {
-    students.sort((a, b) => {
-        // ابتدا بر اساس نام خانوادگی
-        const lastNameCompare = a.lastName.localeCompare(b.lastName, 'fa');
-        if (lastNameCompare !== 0) {
-            return lastNameCompare;
-        }
-        // اگر نام خانوادگی یکسان بود، بر اساس نام
-        return a.firstName.localeCompare(b.firstName, 'fa');
-    });
-}
-
-        // تغییر تب
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const tab = this.getAttribute('data-tab');
-                
-                document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                
-                document.getElementById(tab + '-tab').classList.add('active');
-                this.classList.add('active');
-                
-                if (tab === 'absence') {
-                    renderAbsenceTable();
-                } else if (tab === 'report') {
-                    generateReport();
-                } else if (tab === 'add') {
-                    renderStudentsList();
-                }
-            });
-        });
-
-        // افزودن دانش‌آموز
-        document.getElementById('student-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const student = {
-                id: Date.now(),
-                firstName: document.getElementById('firstName').value.trim(),
-                lastName: document.getElementById('lastName').value.trim(),
-                grade: document.getElementById('grade').value,
-                classNum: document.getElementById('classNum').value,
-                teacher: document.getElementById('teacher').value.trim()
+            const formData = {
+                name,
+                lastname,
+                fatherName: document.getElementById('fatherName').value.trim(),
+                fatherPhone: document.getElementById('fatherPhone').value.trim(),
+                motherPhone: document.getElementById('motherPhone').value.trim(),
+                shadNumber: document.getElementById('shadNumber').value.trim(),
+                fatherJob: document.getElementById('fatherJob').value
             };
-            
-            students.push(student);
-            sortStudents();
-            saveData();
-            this.reset();
-            renderStudentsList();
-            showSuccessMessage('add-message', '✅ دانش‌آموز با موفقیت اضافه شد!');
-        });
 
-        // نمایش لیست دانش‌آموزان
-        function renderStudentsList() {
-            const container = document.getElementById('students-list');
-            document.getElementById('student-count').textContent = students.length;
-            
-            if (students.length === 0) {
-                container.innerHTML = '<div class="empty-state">هنوز دانش‌آموزی ثبت نشده است</div>';
-                return;
-            }
-            
-            sortStudents();
-            
-            let html = '<table class="students-table"><tr><th>ردیف</th><th>نام</th><th>نام خانوادگی</th><th>پایه</th><th>کلاس</th><th>معلم</th><th>عملیات</th></tr>';
-            
-            students.forEach((s, index) => {
-                html += `<tr>
-                    <td>${index + 1}</td>
-                    <td>${s.firstName}</td>
-                    <td>${s.lastName}</td>
-                    <td>${s.grade}</td>
-                    <td>${s.classNum}</td>
-                    <td>${s.teacher}</td>
-                    <td><button class="btn btn-danger delete-btn" data-id="${s.id}">حذف</button></td>
-                </tr>`;
-            });
-            
-            html += '</table>';
-            container.innerHTML = html;
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = SCRIPT_URL;
+            form.style.display = 'none';
 
-            // اضافه کردن event listener برای دکمه‌های حذف
-            container.querySelectorAll('.delete-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const id = parseInt(this.getAttribute('data-id'));
-                    deleteStudent(id);
-                });
+            Object.keys(formData).forEach(key => {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = key;
+                input.value = formData[key];
+                form.appendChild(input);
             });
+
+            const iframe = document.createElement('iframe');
+            iframe.name = 'responseFrame';
+            iframe.style.display = 'none';
+            
+            let submitted = false;
+            
+            iframe.onload = () => {
+                if (!submitted) {
+                    submitted = true;
+                    setTimeout(() => {
+                        try {
+                            document.body.removeChild(form);
+                            document.body.removeChild(iframe);
+                        } catch(e) {}
+                        
+                        showFloatingMessage('success', `✅ "${name} ${lastname}" با موفقیت ثبت شد!`);
+                        
+                        // پاک کردن فرم
+                        document.querySelectorAll('#formSection input').forEach(i => i.value = '');
+                    }, 1200);
+                }
+            };
+
+            iframe.onerror = () => {
+                try {
+                    document.body.removeChild(form);
+                    document.body.removeChild(iframe);
+                } catch(e) {}
+                showFloatingMessage('error', '❌ خطا در ارسال! لطفاً دوباره تلاش کنید');
+            };
+
+            document.body.appendChild(iframe);
+            document.body.appendChild(form);
+            form.target = 'responseFrame';
+            form.submit();
         }
 
-        // حذف دانش‌آموز
-        function deleteStudent(id) {
-            if (confirm('آیا مطمئن هستید که می‌خواهید این دانش‌آموز را حذف کنید؟')) {
-                students = students.filter(s => s.id !== id);
-                saveData();
-                renderStudentsList();
-                showSuccessMessage('add-message', '✅ دانش‌آموز با موفقیت حذف شد');
-            }
-        }
+        // تابع جدید برای حذف از گوگل شیتس با استفاده از iframe
+        function deleteFromSheets(name, lastname, callback) {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = SCRIPT_URL;
+            form.style.display = 'none';
 
-        // فیلتر دانش‌آموزان
-        document.getElementById('filter-grade').addEventListener('change', renderAbsenceTable);
-        document.getElementById('filter-class').addEventListener('change', renderAbsenceTable);
+            // اضافه کردن پارامترهای حذف
+            const actionInput = document.createElement('input');
+            actionInput.type = 'hidden';
+            actionInput.name = 'action';
+            actionInput.value = 'delete';
+            form.appendChild(actionInput);
 
-        // نمایش جدول غیبت
-        function renderAbsenceTable() {
-            const container = document.getElementById('absence-table');
-            const filterGrade = document.getElementById('filter-grade').value;
-            const filterClass = document.getElementById('filter-class').value;
-            
-            let filtered = students.filter(s => {
-                return (!filterGrade || s.grade === filterGrade) &&
-                       (!filterClass || s.classNum === filterClass);
-            });
+            const nameInput = document.createElement('input');
+            nameInput.type = 'hidden';
+            nameInput.name = 'name';
+            nameInput.value = name;
+            form.appendChild(nameInput);
 
-            // مرتب‌سازی
-            filtered.sort((a, b) => {
-                const lastNameA = a.lastName + ' ' + a.lastName;
-                const lastNameB = b.lastName + ' ' + b.lastName;
-                return lastNameA.localeCompare(lastNameB, 'fa'); // تصحیح مرتب‌سازی
-            });
-            
-            if (filtered.length === 0) {
-                container.innerHTML = '<div class="empty-state">دانش‌آموزی یافت نشد</div>';
-                return;
-            }
-            
-            let html = '<table class="students-table"><tr><th>ردیف</th><th>نام و نام خانوادگی</th><th>پایه</th><th>کلاس</th><th>معلم</th><th>غایب</th></tr>';
-            
-            filtered.forEach((s, index) => {
-                const isAbsent = absences[s.id] || false;
-                html += `<tr>
-                    <td>${index + 1}</td>
-                    <td>${s.firstName} ${s.lastName}</td>
-                    <td>${s.grade}</td>
-                    <td>${s.classNum}</td>
-                    <td>${s.teacher}</td>
-                    <td class="checkbox-cell">
-                        <input type="checkbox" ${isAbsent ? 'checked' : ''} 
-                               class="absence-checkbox" data-student-id="${s.id}">
-                    </td>
-                </tr>`;
-            });
-            
-            html += '</table>';
-            container.innerHTML = html;
-            
-            // اضافه کردن event listener برای چک باکس‌ها
-            container.querySelectorAll('.absence-checkbox').forEach(cb => {
-                cb.addEventListener('change', function() {
-                    const studentId = parseInt(this.getAttribute('data-student-id'));
-                    absences[studentId] = this.checked;
-                });
-            });
-        }
+            const lastnameInput = document.createElement('input');
+            lastnameInput.type = 'hidden';
+            lastnameInput.name = 'lastname';
+            lastnameInput.value = lastname;
+            form.appendChild(lastnameInput);
 
-        // ذخیره غیبت‌ها
-        document.getElementById('save-absences-btn').addEventListener('click', function() {
-            saveData();
-            showSuccessMessage('absence-message', '✅ غیبت‌ها با موفقیت ثبت شد!');
-        });
+            const iframe = document.createElement('iframe');
+            iframe.name = 'deleteFrame';
+            iframe.style.display = 'none';
+            
+            let submitted = false;
+            
+            iframe.onload = () => {
+                if (!submitted) {
+                    submitted = true;
+                    setTimeout(() => {
+                        try {
+                            document.body.removeChild(form);
+                            document.body.removeChild(iframe);
+                        } catch(e) {}
+                        
+                        // فراخوانی callback با موفقیت
+                        if (callback) callback(true);
+                    }, 1200);
+                }
+            };
 
-        // پاک کردن غیبت‌ها
-        document.getElementById('clear-absences-btn').addEventListener('click', function() {
-            if (confirm('آیا مطمئن هستید که می‌خواهید همه غیبت‌ها را پاک کنید؟')) {
-                absences = {};
-                saveData();
-                renderAbsenceTable();
-                showSuccessMessage('absence-message', '✅ همه غیبت‌ها پاک شد');
-            }
-        });
-
-        // تولید گزارش
-        function generateReport() {
-            const container = document.getElementById('report-content');
-            
-            const absentStudents = students.filter(s => absences[s.id]);
-            
-            if (absentStudents.length === 0) {
-                container.textContent = 'امروز هیچ دانش‌آموزی غیبت نداشته است. 🎉';
-                return;
-            }
-            
-            let report = `📋 گزارش غیبت دانش‌آموزان\n`;
-            report += `📅 تاریخ: ${today}\n`;
-            report += `📊 تعداد غایبین: ${absentStudents.length} نفر\n\n`;
-            report += `─────────────────────────────\n\n`;
-            
-            // گروه‌بندی بر اساس پایه و کلاس
-            const grouped = {};
-            absentStudents.forEach(s => {
-                const key = `پایه ${s.grade} - کلاس ${s.classNum}`;
-                if (!grouped[key]) grouped[key] = [];
-                grouped[key].push(s);
-            });
-            
-            // مرتب‌سازی گروه‌ها
-            const sortedKeys = Object.keys(grouped).sort();
-            
-            sortedKeys.forEach(key => {
-                report += `📚 ${key}\n`;
-                report += `👨‍🏫 معلم: ${grouped[key][0].teacher}\n\n`;
+            iframe.onerror = () => {
+                try {
+                    document.body.removeChild(form);
+                    document.body.removeChild(iframe);
+                } catch(e) {}
                 
-                // مرتب‌سازی دانش‌آموزان در هر گروه
-                grouped[key].sort((a, b) => {
-                    const nameA = a.firstName + ' ' + a.lastName;
-                    const nameB = b.firstName + ' ' + b.lastName;
-                    return nameA.localeCompare(nameB, 'fa');
-                });
-                
-                grouped[key].forEach((s, i) => {
-                    report += `   ${i + 1}. ${s.firstName} ${s.lastName}\n`;
-                });
-                report += `\n`;
-            });
-            
-            report += `─────────────────────────────\n`;
-            report += `\n🙏 لطفاً در اسرع وقت جهت موجه کردن غیبت اقدام نمایید.`;
-            
-            container.textContent = report;
+                // فراخوانی callback با خطا
+                if (callback) callback(false);
+            };
+
+            document.body.appendChild(iframe);
+            document.body.appendChild(form);
+            form.target = 'deleteFrame';
+            form.submit();
         }
 
-        document.getElementById('generate-report-btn').addEventListener('click', function() {
-            generateReport();
-        });
+        function loadFromSheets() {
+            showFloatingMessage('info', '⏳ در حال بارگذاری از Google Sheets...');
+            
+            const timestamp = Date.now();
+            const script = document.createElement('script');
+            script.src = `${SCRIPT_URL}?callback=handleData&t=${timestamp}`;
 
-        // کپی گزارش
-        document.getElementById('copy-report-btn').addEventListener('click', function() {
-            const report = document.getElementById('report-content').textContent;
-            if (report && report !== 'برای تولید گزارش، روی دکمه "تولید گزارش" کلیک کنید') {
-                navigator.clipboard.writeText(report).then(() => {
-                    alert('✅ گزارش کپی شد!');
-                }).catch(() => {
-                    alert('❌ خطا در کپی کردن. لطفاً دوباره تلاش کنید.');
-                });
-            } else {
-                alert('⚠️ ابتدا گزارش را تولید کنید');
+            window.handleData = (data) => {
+                try {
+                    document.body.removeChild(script);
+                } catch(e) {}
+                delete window.handleData;
+
+                if (data && Array.isArray(data)) {
+                    allData = data;
+                    document.getElementById('searchInput').value = '';
+                    displayEmptyState('loaded');
+                    showFloatingMessage('success', `✅ ${data.length} رکورد با موفقیت بارگذاری شد!`);
+                } else {
+                    showFloatingMessage('error', '❌ خطا در دریافت داده‌ها');
+                }
+            };
+
+            script.onerror = () => {
+                try {
+                    document.body.removeChild(script);
+                } catch(e) {}
+                delete window.handleData;
+                showFloatingMessage('error', '❌ خطا در اتصال به Google Sheets!');
+            };
+
+            document.body.appendChild(script);
+        }
+
+        function performSearch() {
+            const term = document.getElementById('searchInput').value.toLowerCase().trim();
+            const field = document.getElementById('searchField').value;
+
+            // اگر خالی است، پیام نمایش بده
+            if (!term) {
+                displayEmptyState(allData.length > 0 ? 'loaded' : 'start');
+                return;
             }
-        });
 
-        // بارگذاری اولیه
-        loadData();
-        renderStudentsList();
+            // فیلتر کردن
+            const filtered = allData.filter(item => 
+                item[field]?.toLowerCase().includes(term)
+            );
+
+            displayResults(filtered, term);
+        }
+
+        function displayEmptyState(type) {
+            const results = document.getElementById('results');
+            
+            if (type === 'start') {
+                results.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🔍</div>
+                        <h3>شروع به تایپ کنید</h3>
+                        <p>برای نمایش نتایج، در کادر جستجو تایپ کنید</p>
+                        ${allData.length === 0 ? '<p style="margin-top:10px;color:#f59e0b;">⚠️ ابتدا روی دکمه "بارگذاری از Sheets" کلیک کنید</p>' : `<p style="margin-top:10px;color:#10b981;">✅ ${allData.length} رکورد در دیتابیس</p>`}
+                    </div>
+                `;
+            } else if (type === 'loaded') {
+                results.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">✅</div>
+                        <h3>داده‌ها بارگذاری شد</h3>
+                        <p>${allData.length} رکورد آماده جستجو</p>
+                        <p style="margin-top:10px;color:#6b7280;">شروع به تایپ کنید تا نتایج نمایش داده شود</p>
+                    </div>
+                `;
+            }
+        }
+
+        function displayResults(data, searchTerm) {
+            const results = document.getElementById('results');
+            
+            if (data.length === 0) {
+                results.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">😔</div>
+                        <h3>نتیجه‌ای یافت نشد</h3>
+                        <p>عبارت دیگری را جستجو کنید</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = `<div class="message info">🔍 ${data.length} نتیجه برای "${searchTerm}" یافت شد</div>`;
+
+            html += data.map((item) => `
+                <div class="result-item">
+                    <div class="result-header">
+                        <div>
+                            <h3>${item.name} ${item.lastname}</h3>
+                            <p>فرزند ${item.fatherName || '---'}</p>
+                            ${item.timestamp ? `<p style="font-size:10px;margin-top:4px">⏰ ${item.timestamp}</p>` : ''}
+                        </div>
+                        <button class="delete-btn" onclick="deleteRecord('${item.name}', '${item.lastname}', this)">🗑️ حذف</button>
+                    </div>
+                    <div class="result-grid">
+                        <div class="result-field" style="background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);">
+                            <strong>📞 تلفن پدر</strong>
+                            <span>${item.fatherPhone || '---'}</span>
+                            ${item.fatherPhone ? `
+                                <div class="phone-buttons">
+                                    <button class="btn btn-small btn-call" onclick="makeCall('${item.fatherPhone}')">📞 تماس</button>
+                                    <button class="btn btn-small btn-message" onclick="sendMessage('${item.fatherPhone}')">💬 پیام</button>
+                                </div>
+                            ` : ''}
+                        </div>
+                        <div class="result-field" style="background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%);">
+                            <strong>📱 تلفن مادر</strong>
+                            <span>${item.motherPhone || '---'}</span>
+                            ${item.motherPhone ? `
+                                <div class="phone-buttons">
+                                    <button class="btn btn-small btn-call" onclick="makeCall('${item.motherPhone}')">📞 تماس</button>
+                                    <button class="btn btn-small btn-message" onclick="sendMessage('${item.motherPhone}')">💬 پیام</button>
+                                </div>
+                            ` : ''}
+                        </div>
+                        <div class="result-field" style="background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);">
+                            <strong>💬 شماره شاد</strong>
+                            <span>${item.shadNumber || '---'}</span>
+                        </div>
+                        <div class="result-field" style="background: linear-gradient(135deg, #fed7aa 0%, #fdba74 100%);">
+                            <strong>💼 شغل پدر</strong>
+                            <span>${item.fatherJob || '---'}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            results.innerHTML = html;
+        }
+
+        // تابع به‌روزرسانی شده برای حذف از گوگل شیتس
+        function deleteRecord(studentName, studentLastname, buttonElement) {
+            if (confirm(`آیا از حذف "${studentName} ${studentLastname}" مطمئن هستید؟\n\n⚠️ این عمل غیرقابل بازگشت است!`)) {
+                // پیدا کردن ایندکس دقیق
+                const index = allData.findIndex(item => 
+                    item.name === studentName && item.lastname === studentLastname
+                );
+                
+                if (index !== -1) {
+                    // پیدا کردن کارت مربوطه
+                    const resultItem = buttonElement.closest('.result-item');
+                    resultItem.classList.add('deleting');
+                    
+                    // نمایش پیام در حال حذف
+                    const message = showItemMessage(resultItem, 'info', '⏳ در حال حذف از سرور...');
+                    
+                    // حذف از گوگل شیتس
+                    deleteFromSheets(studentName, studentLastname, (success) => {
+                        // حذف پیام info
+                        if (message && message.parentElement) {
+                            message.remove();
+                        }
+                        
+                        if (success) {
+                            // حذف از آرایه و بروزرسانی نمایش
+                            allData.splice(index, 1);
+                            showItemMessage(resultItem, 'success', `✅ "${studentName} ${studentLastname}" حذف شد`);
+                            
+                            setTimeout(() => {
+                                performSearch();
+                            }, 1200);
+                        } else {
+                            showItemMessage(resultItem, 'error', '❌ خطا در حذف از سرور');
+                            resultItem.classList.remove('deleting');
+                        }
+                    });
+                } else {
+                    const resultItem = buttonElement.closest('.result-item');
+                    showItemMessage(resultItem, 'error', '❌ رکورد یافت نشد');
+                }
+            }
+        }
+
+        function showItemMessage(element, type, text) {
+            // حذف پیام‌های قبلی در این آیتم
+            const existingMsg = element.querySelector('.item-message');
+            if (existingMsg) existingMsg.remove();
+            
+            // ساخت پیام جدید
+            const message = document.createElement('div');
+            message.className = `item-message ${type}`;
+            message.textContent = text;
+            
+            element.style.position = 'relative';
+            element.appendChild(message);
+            
+            // برای پیام‌های موقت، بعد از مدتی حذف شوند
+            if (type !== 'info') {
+                setTimeout(() => {
+                    message.classList.add('hiding');
+                    setTimeout(() => {
+                        if (message.parentElement) {
+                            message.remove();
+                        }
+                    }, 300);
+                }, 2000);
+            }
+            
+            return message; // برای حذف دستی پیام‌های info
+        }
+
+        function makeCall(phone) {
+            if (phone) {
+                window.location.href = `tel:${phone}`;
+            }
+        }
+
+        function sendMessage(phone) {
+            if (phone) {
+                window.location.href = `sms:${phone}`;
+            }
+        }
+
+        function exportCSV() {
+            if (allData.length === 0) {
+                showFloatingMessage('error', '⚠️ داده‌ای برای خروجی وجود ندارد');
+                return;
+            }
+
+            const headers = 'نام,نام خانوادگی,نام پدر,تلفن پدر,تلفن مادر,شماره شاد,شغل پدر\n';
+            const rows = allData.map(s => 
+                `${s.name},${s.lastname},${s.fatherName},${s.fatherPhone},${s.motherPhone},${s.shadNumber},${s.fatherJob}`
+            ).join('\n');
+            
+            const csv = '\uFEFF' + headers + rows;
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `data_${Date.now()}.csv`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showFloatingMessage('success', `✅ فایل CSV با ${allData.length} رکورد دانلود شد`);
+        }
+
+        // نمایش پیام اولیه در صفحه جستجو
+        displayEmptyState('start');
     </script>
 </body>
 </html>
-

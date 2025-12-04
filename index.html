@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ثبت سرویس دانش‌آموزی - مدرسه شهیدان نیاسری</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { font-family: Vazirmatn, Tahoma, sans-serif; }
+        body { background: linear-gradient(135deg, #48bb78 0%, #38a169 100%); min-height: 100vh; }
+        .page { display: none !important; }
+        .page.active { display: block !important; }
+        
+        .main-page { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+        .main-container { background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); padding: 40px; max-width: 500px; width: 100%; text-align: center; }
+        .main-container h1 { color: #2d3748; font-size: 28px; margin-bottom: 20px; }
+        .main-container p { color: #4a5568; font-size: 16px; margin-bottom: 30px; }
+        .btn-start { width: 100%; padding: 18px; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; font-size: 18px; background: #48bb78; color: white; transition: all 0.3s; }
+        .btn-start:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        
+        .form-page { padding: 30px 20px; }
+        .form-container { background: white; border-radius: 15px; padding: 30px; max-width: 1000px; margin: 0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        
+        .school-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        .school-logo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #48bb78;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+        .school-title-container {
+            text-align: center;
+            flex-grow: 1;
+            padding: 0 20px;
+        }
+        .school-title {
+            color: #2d3748;
+            font-size: 24px;
+            font-weight: 700;
+            margin: 0;
+        }
+        .school-subtitle {
+            color: #4a5568;
+            font-size: 16px;
+            margin: 5px 0 0 0;
+        }
+        
+        .card-section { background: #f5f7ff; border: 1px solid #e0e7ff; border-radius: 10px; padding: 20px; margin-bottom: 20px; }
+        .section-title { color: #48bb78; font-weight: 700; margin-bottom: 15px; font-size: 15px; }
+        .form-group-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px; }
+        .form-label { color: #333; font-weight: 600; margin-bottom: 6px; font-size: 13px; }
+        .form-control, .form-select { padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 13px; width: 100%; }
+        .form-control:focus, .form-select:focus { outline: none; border-color: #48bb78; box-shadow: 0 0 0 3px rgba(72,187,120,0.1); }
+        textarea.form-control { min-height: 80px; resize: vertical; }
+        .buttons-group { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 12px; margin-top: 30px; }
+        .btn-custom { padding: 12px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 13px; color: white; transition: all 0.2s; }
+        .btn-save { background: #48bb78; }
+        .btn-print { background: #667eea; }
+        .btn-back { background: #718096; }
+        
+        .amount-input { text-align: left; direction: ltr; }
+        .signature-section {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            font-size: 11px;
+            color: #555;
+        }
+        
+        .logo-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        @media (max-width: 768px) {
+            .form-group-row { grid-template-columns: 1fr; }
+            .buttons-group { grid-template-columns: repeat(2, 1fr); }
+            .school-logo { width: 80px; height: 80px; }
+            .school-title { font-size: 18px; }
+            .school-subtitle { font-size: 14px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- صفحه اصلی (اولین صفحه) -->
+    <div id="mainPage" class="page active main-page">
+        <div class="main-container">
+            <div class="school-logo" style="margin: 0 auto 20px; width: 120px; height: 120px;">
+                <img src="https://i.imgur.com/eCxFZCM.jpeg" alt="لوگو مدرسه" class="logo-img">
+            </div>
+            
+            <h1>🚐 ثبت  اطلاعات سرویس دانش‌آموزی</h1>
+            <p><strong>مدرسه شهیدان نیاسری ۱</strong><br>لطفاً برای ثبت اطلاعات سرویس فرزندتان روی دکمه زیر کلیک کنید</p>
+            
+            <button class="btn-start" onclick="showFormPage()">
+                👨‍🎓 شروع ثبت اطلاعات
+            </button>
+            
+            <p style="margin-top: 30px; font-size: 14px; color: #718096;">
+                پس از ثبت، اطلاعات ذخیره می‌شود<br>
+                سال تحصیلی ۱۴۰۴-۱۴۰۵
+            </p>
+        </div>
+    </div>
+
+    <!-- صفحه فرم ثبت -->
+    <div id="formPage" class="page form-page">
+        <div class="form-container">
+            <div class="school-header">
+                <div class="school-logo left">
+                    <img src="https://i.imgur.com/eCxFZCM.jpeg" alt="لوگو مدرسه" class="logo-img">
+                </div>
+                <div class="school-title-container">
+                    <h1 class="school-title">مدرسه شهیدان نیاسری 1</h1>
+                    <p class="school-subtitle">ثبت اطلاعات سرویس دانش‌آموزی</p>
+                </div>
+                <div class="school-logo right">
+                    <img src="https://i.imgur.com/VAsoxgf.jpeg" alt="لوگو مدرسه" class="logo-img">
+                </div>
+            </div>
+            
+            <form id="studentForm" onsubmit="submitForm(event)">
+                <div class="card-section">
+                    <div class="section-title"><i class="fas fa-user-graduate"></i> اطلاعات دانش‌آموز</div>
+                    <div class="form-group-row">
+                        <div><label class="form-label">نام و نام خانوادگی دانش‌آموز *</label><input type="text" class="form-control" name="studentFullName" required></div>
+                        <div><label class="form-label">نام پدر *</label><input type="text" class="form-control" name="fatherName" required></div>
+                        <div><label class="form-label">شماره ملی *</label><input type="text" class="form-control" name="nationalId" required maxlength="10" pattern="\d{10}" placeholder="۱۰ رقم"></div>
+                    </div>
+                    <div class="form-group-row">
+                        <div><label class="form-label">تلفن پدر</label><input type="tel" class="form-control" name="fatherPhone" placeholder="09123456789" pattern="09\d{9}"></div>
+                        <div><label class="form-label">تلفن مادر</label><input type="tel" class="form-control" name="motherPhone" placeholder="09123456789" pattern="09\d{9}"></div>
+                        <div><label class="form-label">پایه تحصیلی *</label>
+                            <select class="form-select" name="classNumber" required>
+                                <option value="">انتخاب کنید</option>
+                                <option value="اول">اول</option>
+                                <option value="دوم">دوم</option>
+                                <option value="سوم">سوم</option>
+                                <option value="چهارم">چهارم</option>
+                                <option value="پنجم">پنجم</option>
+                                <option value="ششم">ششم</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group-row">
+                        <div><label class="form-label">شماره کلاس (1-6) *</label>
+                            <select class="form-select" name="classNumberDigit" required>
+                                <option value="">انتخاب کنید</option>
+                                <option value="1">کلاس 1</option>
+                                <option value="2">کلاس 2</option>
+                                <option value="3">کلاس 3</option>
+                                <option value="4">کلاس 4</option>
+                                <option value="5">کلاس 5</option>
+                                <option value="6">کلاس 6</option>
+                            </select>
+                        </div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+
+                <div class="card-section">
+                    <div class="section-title"><i class="fas fa-bus"></i> اطلاعات سرویس</div>
+                    <div class="form-group-row">
+                        <div><label class="form-label">نوع خودرو</label>
+                            <select class="form-select" name="vehicleType">
+                                <option value="">انتخاب کنید</option>
+                                <option value="ون">ون</option>
+                                <option value="مینی‌بوس">مینی‌بوس</option>
+                                <option value="اتوبوس">اتوبوس</option>
+                                <option value="سواری">سواری</option>
+                            </select>
+                        </div>
+                        <div><label class="form-label">نام راننده</label><input type="text" class="form-control" name="driverName"></div>
+                        <div><label class="form-label">تلفن راننده</label><input type="tel" class="form-control" name="driverPhone" placeholder="09123456789" pattern="09\d{9}"></div>
+                    </div>
+                    <div class="form-group-row">
+                        <div>
+                            <label class="form-label">کرایه ماهانه (تومان)</label>
+                            <input type="text" class="form-control amount-input" name="monthlyFare" placeholder="1,500,000" oninput="formatAmount(this)">
+                            <small class="text-muted" style="font-size: 11px;">مثال: 1,500,000</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-section">
+                    <div class="section-title"><i class="fas fa-map-marker-alt"></i> آدرس محل سکونت</div>
+                    <div class="form-group-row">
+                        <div><label class="form-label">آدرس محل سکونت</label><textarea class="form-control" name="address" placeholder="آدرس کامل محل سکونت"></textarea></div>
+                    </div>
+                </div>
+
+                <div class="signature-section">
+                    <p>مدیر مدرسه: حیدر ی</p>
+                    <p style="font-size: 10px; color: #777; margin-top: 5px;">مدرسه شهیدان نیاسری 1 - سال تحصیلی ۱۴۰۴-۱۴۰۵</p>
+                </div>
+
+                <div class="buttons-group">
+                    <button type="submit" class="btn-custom btn-save">💾 ثبت اطلاعات</button>
+                    <button type="button" class="btn-custom btn-print" onclick="printForm()">🖨️ چاپ فرم</button>
+                    <button type="button" class="btn-custom btn-back" onclick="backToMain()">🔙 بازگشت</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ناحیه اعلان -->
+    <div id="toastArea" class="position-fixed bottom-0 end-0 p-3" style="z-index: 1055;"></div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // تنظیمات
+        const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbyofnb9tzrH5pApUKEIhqoZ8643aifoZAQRpC_dumdlJQ_MIU6qD7YJVjq0up6gSI-e/exec";
+        
+        // مدیریت صفحات
+        function showFormPage() {
+            document.getElementById('mainPage').classList.remove('active');
+            document.getElementById('formPage').classList.add('active');
+            document.getElementById('studentForm').reset();
+        }
+        
+        function backToMain() {
+            document.getElementById('formPage').classList.remove('active');
+            document.getElementById('mainPage').classList.add('active');
+        }
+        
+        // فرمت مبلغ
+        function formatAmount(input) {
+            let value = input.value.replace(/[^\d]/g, '');
+            if (value.length > 3) {
+                value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
+            input.value = value;
+        }
+        
+        function parseAmount(amountStr) {
+            if (!amountStr) return '';
+            return amountStr.replace(/[^\d]/g, '');
+        }
+        
+        // نمایش پیام
+        function showToast(msg, type = 'info') {
+            const colors = {success: 'bg-success', danger: 'bg-danger', warning: 'bg-warning', info: 'bg-info'};
+            const id = 't' + Date.now();
+            const html = `<div id="${id}" class="toast text-white ${colors[type]} border-0"><div class="toast-body">${msg}</div></div>`;
+            document.getElementById('toastArea').insertAdjacentHTML('beforeend', html);
+            new bootstrap.Toast(document.getElementById(id), { delay: 3000 }).show();
+        }
+        
+        // ارسال فرم
+        function submitForm(e) {
+            e.preventDefault();
+            const form = document.getElementById('studentForm');
+            const formData = new FormData(form);
+            const data = {};
+            
+            for (let [key, value] of formData.entries()) {
+                if (key === 'monthlyFare') {
+                    data[key] = parseAmount(value);
+                } else {
+                    data[key] = value;
+                }
+            }
+            
+            // اعتبارسنجی
+            if (!data.studentFullName || !data.fatherName || !data.nationalId || !data.classNumber || !data.classNumberDigit) {
+                showToast('❌ لطفاً تمام فیلدهای الزامی (*) را پر کنید', 'danger');
+                return;
+            }
+            
+            if (data.nationalId.length !== 10 || isNaN(data.nationalId)) {
+                showToast('❌ شماره ملی باید ۱۰ رقم باشد', 'danger');
+                return;
+            }
+            
+            // ارسال به سرور
+            const cb = 'handleResponse_' + Date.now();
+            const params = new URLSearchParams();
+            
+            params.append('action', 'create');
+            params.append('callback', cb);
+            
+            Object.entries(data).forEach(([key, value]) => {
+                if (value !== null && value !== undefined) {
+                    params.append(key, value.toString());
+                }
+            });
+            
+            const url = WEBAPP_URL + '?' + params.toString();
+            const script = document.createElement('script');
+            
+            window[cb] = function(response) {
+                if (response && response.status === 'success') {
+                    showToast('✅ اطلاعات با موفقیت ثبت شد', 'success');
+                    form.reset();
+                    setTimeout(() => backToMain(), 2000);
+                } else {
+                    const errorMsg = response && response.message ? response.message : 'خطا در ارتباط با سرور';
+                    showToast('❌ ' + errorMsg, 'danger');
+                }
+                
+                if (document.head.contains(script)) {
+                    document.head.removeChild(script);
+                }
+                delete window[cb];
+            };
+            
+            script.onerror = function() {
+                showToast('❌ خطا در ارسال اطلاعات', 'danger');
+                if (document.head.contains(script)) {
+                    document.head.removeChild(script);
+                }
+                delete window[cb];
+            };
+            
+            script.src = url;
+            document.head.appendChild(script);
+        }
+        
+        // چاپ فرم
+        function printForm() {
+            const form = document.getElementById('studentForm');
+            const formData = new FormData(form);
+            const data = {};
+            
+            for (let [key, value] of formData.entries()) {
+                data[key] = value;
+            }
+            
+            const formattedFare = data.monthlyFare ? 
+                parseInt(parseAmount(data.monthlyFare)).toLocaleString('fa-IR') + ' تومان' : '';
+            
+            let html = `
+                <!DOCTYPE html>
+                <html dir="rtl">
+                <head>
+                    <meta charset="utf-8">
+                    <style>
+                        * { margin: 0; padding: 0; font-family: Tahoma; }
+                        body { font-size: 12px; padding: 15px; }
+                        .container { border: 2px solid #000; padding: 20px; }
+                        .header { text-align: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #000; }
+                        .row { display: flex; margin-bottom: 10px; }
+                        .label { font-weight: bold; width: 40%; padding-left: 10px; }
+                        .value { width: 60%; border-right: 1px solid #000; padding-right: 10px; }
+                        .footer { margin-top: 30px; padding-top: 15px; border-top: 1px solid #000; text-align: center; font-size: 11px; }
+                    </style>
+                </head>
+                <body>
+                <div class="container">
+                    <div class="header">
+                        <h2>مدرسه شهیدان نیاسری ۱</h2>
+                        <h3>فرم اطلاعات سرویس دانش‌آموزی</h3>
+                    </div>
+                    
+                    <div class="row"><div class="label">نام دانش‌آموز:</div><div class="value">${data.studentFullName || ''}</div></div>
+                    <div class="row"><div class="label">نام پدر:</div><div class="value">${data.fatherName || ''}</div></div>
+                    <div class="row"><div class="label">شماره ملی:</div><div class="value">${data.nationalId || ''}</div></div>
+                    <div class="row"><div class="label">پایه تحصیلی:</div><div class="value">${data.classNumber || ''}</div></div>
+                    <div class="row"><div class="label">شماره کلاس:</div><div class="value">${data.classNumberDigit || ''}</div></div>
+                    <div class="row"><div class="label">تلفن پدر:</div><div class="value">${data.fatherPhone || ''}</div></div>
+                    <div class="row"><div class="label">تلفن مادر:</div><div class="value">${data.motherPhone || ''}</div></div>
+                    <div class="row"><div class="label">نوع خودرو:</div><div class="value">${data.vehicleType || ''}</div></div>
+                    <div class="row"><div class="label">راننده:</div><div class="value">${data.driverName || ''}</div></div>
+                    <div class="row"><div class="label">تلفن راننده:</div><div class="value">${data.driverPhone || ''}</div></div>
+                    <div class="row"><div class="label">کرایه ماهانه:</div><div class="value">${formattedFare}</div></div>
+                    <div class="row"><div class="label">آدرس:</div><div class="value">${data.address || ''}</div></div>
+                    
+                    <div class="footer">
+                        <p>مدیر مدرسه: حیدر ی</p>
+                        <p>مدرسه شهیدان نیاسری ۱ - سال تحصیلی ۱۴۰۴-۱۴۰۵</p>
+                    </div>
+                </div>
+                </body>
+                </html>
+            `;
+            
+            const printWindow = window.open('', '', 'width=800,height=600');
+            printWindow.document.write(html);
+            printWindow.document.close();
+            setTimeout(() => {
+                printWindow.print();
+                printWindow.close();
+            }, 250);
+        }
+        
+        // شروع
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('📝 فرم ثبت سرویس والدین آماده است');
+        });
+    </script>
+</body>
+</html>

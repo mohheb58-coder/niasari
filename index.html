@@ -62,9 +62,13 @@
         
         .card-section { background: #f5f7ff; border: 1px solid #e0e7ff; border-radius: 10px; padding: 20px; margin-bottom: 20px; }
         .section-title { color: #48bb78; font-weight: 700; margin-bottom: 15px; font-size: 15px; }
+        .section-title i { margin-left: 5px; }
         .form-group-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px; }
         .form-label { color: #333; font-weight: 600; margin-bottom: 6px; font-size: 13px; }
+        .form-label::after { content: " *"; color: #f56565; margin-right: 3px; }
         .form-control, .form-select { padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 13px; width: 100%; }
+        .form-control:required, .form-select:required { border-right: 3px solid #48bb78; }
+        .form-control:invalid, .form-select:invalid { border-color: #f56565; }
         .form-control:focus, .form-select:focus { outline: none; border-color: #48bb78; box-shadow: 0 0 0 3px rgba(72,187,120,0.1); }
         textarea.form-control { min-height: 80px; resize: vertical; }
         .buttons-group { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 12px; margin-top: 30px; }
@@ -107,11 +111,11 @@
                 <img src="https://i.imgur.com/eCxFZCM.jpeg" alt="لوگو مدرسه" class="logo-img">
             </div>
             
-            <h1>🚐 ثبت  اطلاعات سرویس دانش‌آموزی</h1>
+            <h1>🚐 ثبت سرویس دانش‌آموزی</h1>
             <p><strong>مدرسه شهیدان نیاسری ۱</strong><br>لطفاً برای ثبت اطلاعات سرویس فرزندتان روی دکمه زیر کلیک کنید</p>
             
             <button class="btn-start" onclick="showFormPage()">
-                👨‍🎓 شروع ثبت اطلاعات
+                👨‍🎓 شروع ثبت‌ اطاغات سرویس
             </button>
             
             <p style="margin-top: 30px; font-size: 14px; color: #718096;">
@@ -141,14 +145,30 @@
                 <div class="card-section">
                     <div class="section-title"><i class="fas fa-user-graduate"></i> اطلاعات دانش‌آموز</div>
                     <div class="form-group-row">
-                        <div><label class="form-label">نام و نام خانوادگی دانش‌آموز *</label><input type="text" class="form-control" name="studentFullName" required></div>
-                        <div><label class="form-label">نام پدر *</label><input type="text" class="form-control" name="fatherName" required></div>
-                        <div><label class="form-label">شماره ملی *</label><input type="text" class="form-control" name="nationalId" required maxlength="10" pattern="\d{10}" placeholder="۱۰ رقم"></div>
+                        <div>
+                            <label class="form-label">نام و نام خانوادگی دانش‌آموز</label>
+                            <input type="text" class="form-control" name="studentFullName" required>
+                        </div>
+                        <div>
+                            <label class="form-label">نام پدر</label>
+                            <input type="text" class="form-control" name="fatherName" required>
+                        </div>
+                        <div>
+                            <label class="form-label">شماره ملی</label>
+                            <input type="text" class="form-control" name="nationalId" required maxlength="10" pattern="\d{10}" placeholder="۱۰ رقم">
+                        </div>
                     </div>
                     <div class="form-group-row">
-                        <div><label class="form-label">تلفن پدر</label><input type="tel" class="form-control" name="fatherPhone" placeholder="09123456789" pattern="09\d{9}"></div>
-                        <div><label class="form-label">تلفن مادر</label><input type="tel" class="form-control" name="motherPhone" placeholder="09123456789" pattern="09\d{9}"></div>
-                        <div><label class="form-label">پایه تحصیلی *</label>
+                        <div>
+                            <label class="form-label">تلفن پدر</label>
+                            <input type="tel" class="form-control" name="fatherPhone" placeholder="09123456789" pattern="09\d{9}" required>
+                        </div>
+                        <div>
+                            <label class="form-label">تلفن مادر</label>
+                            <input type="tel" class="form-control" name="motherPhone" placeholder="09123456789" pattern="09\d{9}" required>
+                        </div>
+                        <div>
+                            <label class="form-label">پایه تحصیلی</label>
                             <select class="form-select" name="classNumber" required>
                                 <option value="">انتخاب کنید</option>
                                 <option value="اول">اول</option>
@@ -161,7 +181,8 @@
                         </div>
                     </div>
                     <div class="form-group-row">
-                        <div><label class="form-label">شماره کلاس (1-6) *</label>
+                        <div>
+                            <label class="form-label">شماره کلاس (1-6)</label>
                             <select class="form-select" name="classNumberDigit" required>
                                 <option value="">انتخاب کنید</option>
                                 <option value="1">کلاس 1</option>
@@ -180,8 +201,9 @@
                 <div class="card-section">
                     <div class="section-title"><i class="fas fa-bus"></i> اطلاعات سرویس</div>
                     <div class="form-group-row">
-                        <div><label class="form-label">نوع خودرو</label>
-                            <select class="form-select" name="vehicleType">
+                        <div>
+                            <label class="form-label">نوع خودرو</label>
+                            <select class="form-select" name="vehicleType" required>
                                 <option value="">انتخاب کنید</option>
                                 <option value="ون">ون</option>
                                 <option value="مینی‌بوس">مینی‌بوس</option>
@@ -189,13 +211,19 @@
                                 <option value="سواری">سواری</option>
                             </select>
                         </div>
-                        <div><label class="form-label">نام راننده</label><input type="text" class="form-control" name="driverName"></div>
-                        <div><label class="form-label">تلفن راننده</label><input type="tel" class="form-control" name="driverPhone" placeholder="09123456789" pattern="09\d{9}"></div>
+                        <div>
+                            <label class="form-label">نام راننده</label>
+                            <input type="text" class="form-control" name="driverName" required>
+                        </div>
+                        <div>
+                            <label class="form-label">تلفن راننده</label>
+                            <input type="tel" class="form-control" name="driverPhone" placeholder="09123456789" pattern="09\d{9}" required>
+                        </div>
                     </div>
                     <div class="form-group-row">
                         <div>
                             <label class="form-label">کرایه ماهانه (تومان)</label>
-                            <input type="text" class="form-control amount-input" name="monthlyFare" placeholder="1,500,000" oninput="formatAmount(this)">
+                            <input type="text" class="form-control amount-input" name="monthlyFare" placeholder="1,500,000" oninput="formatAmount(this)" required>
                             <small class="text-muted" style="font-size: 11px;">مثال: 1,500,000</small>
                         </div>
                     </div>
@@ -204,7 +232,10 @@
                 <div class="card-section">
                     <div class="section-title"><i class="fas fa-map-marker-alt"></i> آدرس محل سکونت</div>
                     <div class="form-group-row">
-                        <div><label class="form-label">آدرس محل سکونت</label><textarea class="form-control" name="address" placeholder="آدرس کامل محل سکونت"></textarea></div>
+                        <div>
+                            <label class="form-label">آدرس محل سکونت</label>
+                            <textarea class="form-control" name="address" placeholder="آدرس کامل محل سکونت" required></textarea>
+                        </div>
                     </div>
                 </div>
 
@@ -271,6 +302,14 @@
         function submitForm(e) {
             e.preventDefault();
             const form = document.getElementById('studentForm');
+            
+            // بررسی اعتبارسنجی HTML5
+            if (!form.checkValidity()) {
+                // اگر فرم معتبر نباشد، مرورگر پیام خطا نشان می‌دهد
+                form.reportValidity();
+                return;
+            }
+            
             const formData = new FormData(form);
             const data = {};
             
@@ -280,17 +319,6 @@
                 } else {
                     data[key] = value;
                 }
-            }
-            
-            // اعتبارسنجی
-            if (!data.studentFullName || !data.fatherName || !data.nationalId || !data.classNumber || !data.classNumberDigit) {
-                showToast('❌ لطفاً تمام فیلدهای الزامی (*) را پر کنید', 'danger');
-                return;
-            }
-            
-            if (data.nationalId.length !== 10 || isNaN(data.nationalId)) {
-                showToast('❌ شماره ملی باید ۱۰ رقم باشد', 'danger');
-                return;
             }
             
             // ارسال به سرور
